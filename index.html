@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Quiz Bot | Neon Quiz Challenge</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        /* Neon suzuvchi zarralar */
+        .neon-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            animation: floatNeon 8s infinite ease-in-out;
+        }
+
+        @keyframes floatNeon {
+            0% {
+                opacity: 0;
+                transform: translate(0, 0) scale(0);
+            }
+            20% {
+                opacity: 0.6;
+            }
+            80% {
+                opacity: 0.4;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.5);
+            }
+        }
+
+        /* Neon fon chiziqlari */
+        .neon-line {
+            position: fixed;
+            background: linear-gradient(90deg, transparent, #00ff88, #00ff88, transparent);
+            height: 2px;
+            width: 100%;
+            top: var(--y);
+            left: -100%;
+            animation: slideLine 4s infinite linear;
+            opacity: 0.3;
+            filter: blur(2px);
+        }
+
+        @keyframes slideLine {
+            to {
+                left: 100%;
+            }
+        }
+
+        /* Asosiy konteyner */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-size: 3rem;
+            text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88; }
+            50% { text-shadow: 0 0 30px #00ff88, 0 0 60px #00ff88, 0 0 80px #00ff88; }
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #fff, #00ff88);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-top: 10px;
+        }
+
+        /* Stats panel */
+        .stats-panel {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0,255,136,0.3);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        /* Subject cards */
+        .subjects {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .subject-card {
+            background: linear-gradient(135deg, rgba(0,255,136,0.1), rgba(0,255,136,0.02));
+            border: 1px solid rgba(0,255,136,0.3);
+            border-radius: 20px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0,255,136,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .subject-card:hover::before {
+            left: 100%;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff88;
+            box-shadow: 0 0 30px rgba(0,255,136,0.3);
+        }
+
+        .subject-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .subject-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .subject-desc {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        /* Difficulty buttons */
+        .difficulty-section {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .difficulty-title {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .difficulty-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .difficulty-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .difficulty-btn.easy {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0,255,136,0.5);
+        }
+
+        .difficulty-btn.medium {
+            background: linear-gradient(135deg, #ffaa00, #ff8800);
+            color: #000;
+            box-shadow: 0 0 20px rgba(255,170,0,0.5);
+        }
+
+        .difficulty-btn.hard {
+            background: linear-gradient(135deg, #ff3366, #cc0044);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(255,51,102,0.5);
+        }
+
+        .difficulty-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Question card */
+        .question-card {
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 30px 20px;
+            margin-bottom: 20px;
+            border: 2px solid #00ff88;
+            box-shadow: 0 0 50px rgba(0,255,136,0.2);
+            animation: glowPulse 2s infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(0,255,136,0.2); }
+            50% { box-shadow: 0 0 60px rgba(0,255,136,0.4); }
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            line-height: 1.4;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .question-progress {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #00ff88;
+            font-size: 0.9rem;
+        }
+
+        /* Options */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(0,255,136,0.3);
+            border-radius: 15px;
+            padding: 15px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .option-btn:hover {
+            background: rgba(0,255,136,0.2);
+            transform: translateX(10px);
+            border-color: #00ff88;
+        }
+
+        /* Result card */
+        .result-card {
+            text-align: center;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 30px;
+            border: 2px solid #00ff88;
+        }
+
+        .result-score {
+            font-size: 3rem;
+            color: #00ff88;
+            text-shadow: 0 0 30px #00ff88;
+            margin: 20px 0;
+        }
+
+        .result-percentage {
+            font-size: 2rem;
+            margin: 10px 0;
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0,255,136,0.5);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ff3366, #cc0044);
+            color: #fff;
+        }
+
+        /* Premium badge */
+        .premium-badge {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 100;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255,215,0,0.5);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #0a0a0a);
+            border-radius: 30px;
+            padding: 30px;
+            max-width: 300px;
+            text-align: center;
+            border: 2px solid #ffd700;
+        }
+
+        .share-link {
+            background: rgba(255,255,255,0.1);
+            padding: 10px;
+            border-radius: 10px;
+            margin: 15px 0;
+            word-break: break-all;
+            font-size: 0.8rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            .question-text {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="premium-badge" id="premiumBadge">⭐ PREMIUM</div>
+
+    <div class="container" id="app">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">⚡ NEON QUIZ ⚡</div>
+            <h1>Bilimingni Sinab Ko'r!</h1>
+        </div>
+
+        <!-- Stats Panel -->
+        <div class="stats-panel">
+            <div class="stat-item">
+                <div class="stat-value" id="totalScore">0</div>
+                <div class="stat-label">Umumiy Ball</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="quizCount">0</div>
+                <div class="stat-label">Testlar</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="premiumCount">0</div>
+                <div class="stat-label">Premium Savol</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div id="mainContent"></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3>✨ Premium Savol ✨</h3>
+            <p>Do'stingizni taklif qiling va premium savol oling!</p>
+            <div class="share-link" id="shareLink"></div>
+            <button class="btn" onclick="copyLink()">📋 Linkni Nusxalash</button>
+            <button class="btn btn-secondary" onclick="closeModal()">Yopish</button>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.enableClosingConfirmation();
+
+        // Ma'lumotlar bazasi (localStorage)
+        let userData = {
+            totalScore: 0,
+            quizCount: 0,
+            premiumQuestions: 0,
+            referrals: []
+        };
+
+        // Savollar bazasi
+        const QUESTIONS = {
+            "Ingliz tili": {
+                easy: [
+                    {q: "What is 'Cat'?", opts: ["It", "Dog", "Cat", "Bird"], ans: "Cat"},
+                    {q: "What does 'Hello' mean?", opts: ["Goodbye", "Hello", "Thanks", "Please"], ans: "Hello"},
+                    {q: "I ___ a student.", opts: ["am", "is", "are", "be"], ans: "am"},
+                    {q: "What is 'Apple'?", opts: ["Orange", "Apple", "Banana", "Grape"], ans: "Apple"},
+                    {q: "She ___ to school.", opts: ["go", "goes", "going", "went"], ans: "goes"},
+                    {q: "What color is the sky?", opts: ["Green", "Blue", "Red", "Yellow"], ans: "Blue"},
+                    {q: "2 + 2 = ?", opts: ["Three", "Four", "Five", "Six"], ans: "Four"},
+                    {q: "'Thank you' meaning?", opts: ["Rahmat", "Salom", "Xayr", "Iltimos"], ans: "Rahmat"},
+                    {q: "What is 'Dog'?", opts: ["Mushuk", "It", "Qush", "Baliq"], ans: "It"},
+                    {q: "What does 'Yes' mean?", opts: ["Ha", "Yo'q", "Balki", "Hech qachon"], ans: "Ha"}
+                ],
+                medium: [
+                    {q: "Past tense of 'Go'?", opts: ["Went", "Gone", "Goed", "Going"], ans: "Went"},
+                    {q: "Correct spelling?", opts: ["Recieve", "Receive", "Receeve", "Recive"], ans: "Receive"},
+                    {q: "Opposite of 'Big'?", opts: ["Large", "Huge", "Small", "Tall"], ans: "Small"},
+                    {q: "She ___ yesterday.", opts: ["go", "goes", "went", "gone"], ans: "went"},
+                    {q: "Synonym for 'Happy'?", opts: ["Sad", "Joyful", "Angry", "Tired"], ans: "Joyful"},
+                    {q: "___ apple", opts: ["a", "an", "the", "none"], ans: "an"},
+                    {q: "Plural of 'Child'?", opts: ["Childs", "Children", "Childes", "Childern"], ans: "Children"},
+                    {q: "'Quick' means?", opts: ["Sekin", "Tez", "Kuchli", "Zaif"], ans: "Tez"},
+                    {q: "Comparative of 'Good'?", opts: ["Gooder", "Better", "Best", "More good"], ans: "Better"},
+                    {q: "Past participle of 'Eat'?", opts: ["Ate", "Eated", "Eaten", "Eating"], ans: "Eaten"}
+                ],
+                hard: [
+                    {q: "What is a palindrome?", opts: ["A number", "Word reads same backward", "Type of bird", "Formula"], ans: "Word reads same backward"},
+                    {q: "Meaning of 'Ubiquitous'?", opts: ["Rare", "Everywhere", "Hidden", "Secret"], ans: "Everywhere"},
+                    {q: "What is a metaphor?", opts: ["Like/as comparison", "Direct comparison", "Exaggeration", "Sound words"], ans: "Direct comparison"},
+                    {q: "Plural of 'Cactus'?", opts: ["Cactuses", "Cacti", "Cactus", "Cactusses"], ans: "Cacti"},
+                    {q: "What is an idiom?", opts: ["Literal", "Figurative", "Math term", "Science"], ans: "Figurative"},
+                    {q: "'Ephemeral' means?", opts: ["Permanent", "Short-lived", "Strong", "Weak"], ans: "Short-lived"},
+                    {q: "Synonym for 'Meticulous'?", opts: ["Careless", "Careful", "Quick", "Slow"], ans: "Careful"},
+                    {q: "Antonym for 'Benevolent'?", opts: ["Kind", "Mean", "Generous", "Nice"], ans: "Mean"},
+                    {q: "What is a homophone?", opts: ["Same spelling", "Same sound", "Same meaning", "Same writing"], ans: "Same sound"},
+                    {q: "What is an oxymoron?", opts: ["Figure of speech", "Animal", "Instrument", "Element"], ans: "Figure of speech"}
+                ]
+            },
+            "Matematika": {
+                easy: [
+                    {q: "5 + 3 = ?", opts: ["6", "7", "8", "9"], ans: "8"},
+                    {q: "10 - 4 = ?", opts: ["5", "6", "7", "8"], ans: "6"},
+                    {q: "3 × 4 = ?", opts: ["10", "11", "12", "13"], ans: "12"},
+                    {q: "20 ÷ 5 = ?", opts: ["3", "4", "5", "6"], ans: "4"},
+                    {q: "9 + 6 = ?", opts: ["14", "15", "16", "17"], ans: "15"},
+                    {q: "18 - 7 = ?", opts: ["10", "11", "12", "13"], ans: "11"},
+                    {q: "7 × 6 = ?", opts: ["40", "41", "42", "43"], ans: "42"},
+                    {q: "36 ÷ 6 = ?", opts: ["5", "6", "7", "8"], ans: "6"},
+                    {q: "15 + 8 = ?", opts: ["22", "23", "24", "25"], ans: "23"},
+                    {q: "25 - 12 = ?", opts: ["12", "13", "14", "15"], ans: "13"}
+                ],
+                medium: [
+                    {q: "15% of 200?", opts: ["20", "25", "30", "35"], ans: "30"},
+                    {q: "√144 = ?", opts: ["10", "11", "12", "13"], ans: "12"},
+                    {q: "x + 5 = 12, x = ?", opts: ["5", "6", "7", "8"], ans: "7"},
+                    {q: "2³ = ?", opts: ["4", "6", "8", "10"], ans: "8"},
+                    {q: "Area of square side 5?", opts: ["20", "25", "30", "35"], ans: "25"},
+                    {q: "3/4 of 100?", opts: ["65", "70", "75", "80"], ans: "75"},
+                    {q: "6 × 8 = ?", opts: ["42", "46", "48", "52"], ans: "48"},
+                    {q: "1/2 + 1/4 = ?", opts: ["1/3", "2/3", "3/4", "1/2"], ans: "3/4"},
+                    {q: "Perimeter 4×6 rectangle?", opts: ["20", "24", "28", "32"], ans: "20"},
+                    {q: "0.5 × 0.5 = ?", opts: ["0.25", "0.5", "1", "2.5"], ans: "0.25"}
+                ],
+                hard: [
+                    {q: "Derivative of x²?", opts: ["x", "2x", "x²", "2"], ans: "2x"},
+                    {q: "∫ x dx = ?", opts: ["x²", "x²/2", "2x", "1"], ans: "x²/2"},
+                    {q: "π to two decimals?", opts: ["3.12", "3.14", "3.16", "3.18"], ans: "3.14"},
+                    {q: "Pythagorean theorem?", opts: ["a+b=c", "a²+b²=c²", "a²-b²=c²", "a×b=c"], ans: "a²+b²=c²"},
+                    {q: "√169 = ?", opts: ["11", "12", "13", "14"], ans: "13"},
+                    {q: "2⁵ = ?", opts: ["16", "24", "32", "36"], ans: "32"},
+                    {q: "Quadratic formula for?", opts: ["Area", "Roots", "Volume", "Perimeter"], ans: "Roots"},
+                    {q: "sin(90°) = ?", opts: ["0", "0.5", "1", "2"], ans: "1"},
+                    {q: "log(100) = ?", opts: ["1", "2", "3", "4"], ans: "2"},
+                    {q: "e (Euler) approx?", opts: ["2.71", "3.14", "1.61", "1.41"], ans: "2.71"}
+                ]
+            },
+            "Koreys tili": {
+                easy: [
+                    {q: "'안녕하세요' meaning?", opts: ["Thank you", "Hello", "Goodbye", "Sorry"], ans: "Hello"},
+                    {q: "'감사합니다' meaning?", opts: ["Hello", "Thank you", "Goodbye", "Sorry"], ans: "Thank you"},
+                    {q: "'죄송합니다' meaning?", opts: ["Thank you", "Hello", "Goodbye", "Sorry"], ans: "Sorry"},
+                    {q: "'네' meaning?", opts: ["No", "Yes", "Maybe", "Okay"], ans: "Yes"},
+                    {q: "'아니요' meaning?", opts: ["Yes", "No", "Okay", "Sorry"], ans: "No"},
+                    {q: "'사랑해' meaning?", opts: ["I hate you", "I love you", "I miss you", "See you"], ans: "I love you"},
+                    {q: "'잘 가' meaning?", opts: ["Hello", "Thank you", "Goodbye", "Sorry"], ans: "Goodbye"},
+                    {q: "'이름' meaning?", opts: ["Age", "Name", "Country", "School"], ans: "Name"},
+                    {q: "'나' meaning?", opts: ["You", "I/Me", "We", "They"], ans: "I/Me"},
+                    {q: "'뭐' meaning?", opts: ["Who", "What", "Where", "When"], ans: "What"}
+                ],
+                medium: [
+                    {q: "'미안합니다' meaning?", opts: ["Thank you", "Hello", "Sorry", "Goodbye"], ans: "Sorry"},
+                    {q: "'어디에요' meaning?", opts: ["Who", "Where", "What", "When"], ans: "Where"},
+                    {q: "'몇 시예요' meaning?", opts: ["What time", "What day", "What month", "What year"], ans: "What time"},
+                    {q: "'얼마예요' meaning?", opts: ["How many", "How much", "How old", "How far"], ans: "How much"},
+                    {q: "'맛있어요' meaning?", opts: ["Bad", "Delicious", "Big", "Small"], ans: "Delicious"},
+                    {q: "'예뻐요' meaning?", opts: ["Ugly", "Pretty", "Big", "Small"], ans: "Pretty"},
+                    {q: "'빨리' meaning?", opts: ["Slowly", "Quickly", "Loudly", "Quietly"], ans: "Quickly"},
+                    {q: "'천천히' meaning?", opts: ["Quickly", "Slowly", "Loudly", "Quietly"], ans: "Slowly"},
+                    {q: "'좋아요' meaning?", opts: ["Hate", "Like", "Don't know", "Tired"], ans: "Like"},
+                    {q: "'싫어요' meaning?", opts: ["Like", "Hate", "Love", "Want"], ans: "Hate"}
+                ],
+                hard: [
+                    {q: "'반갑습니다' meaning?", opts: ["Nice to meet", "Goodbye", "Thank you", "Sorry"], ans: "Nice to meet"},
+                    {q: "'뜻이 뭐예요' meaning?", opts: ["What cost", "What mean", "Where", "Who"], ans: "What mean"},
+                    {q: "'잘 먹겠습니다' meaning?", opts: ["Before meal thanks", "After meal thanks", "Let's eat", "Hungry"], ans: "Before meal thanks"},
+                    {q: "'잘 먹었습니다' meaning?", opts: ["Before meal thanks", "After meal thanks", "Let's eat", "Hungry"], ans: "After meal thanks"},
+                    {q: "'화이팅' meaning?", opts: ["Good luck", "Goodbye", "Hello", "Sorry"], ans: "Good luck"},
+                    {q: "'대박' meaning?", opts: ["Terrible", "Amazing", "Sad", "Boring"], ans: "Amazing"},
+                    {q: "'잠깐만요' meaning?", opts: ["Wait", "Come", "Go", "Help"], ans: "Wait"},
+                    {q: "'괜찮아요' meaning?", opts: ["Bad", "Okay", "Good", "Terrible"], ans: "Okay"},
+                    {q: "'진짜요' meaning?", opts: ["Really", "Fake", "True", "False"], ans: "Really"},
+                    {q: "'알았어요' meaning?", opts: ["Don't know", "Know", "Understand", "Don't understand"], ans: "Understand"}
+                ]
+            }
+        };
+
+        // Premium savollar (referral uchun)
+        const PREMIUM_QUESTIONS = [
+            {q: "⭐ PREMIUM: What is the capital of France?", opts: ["London", "Berlin", "Paris", "Madrid"], ans: "Paris"},
+            {q: "⭐ PREMIUM: Who wrote 'Romeo and Juliet'?", opts: ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"], ans: "William Shakespeare"},
+            {q: "⭐ PREMIUM: What is the largest ocean?", opts: ["Atlantic", "Indian", "Arctic", "Pacific"], ans: "Pacific"}
+        ];
+
+        let currentState = {
+            screen: 'main',
+            subject: null,
+            difficulty: null,
+            currentQuestion: 0,
+            score: 0,
+            questions: [],
+            isPremiumQuiz: false
+        };
+
+        // Neon zarralar yaratish
+        function createNeonParticles() {
+            for(let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'neon-particle';
+                particle.style.width = Math.random() * 8 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.background = `radial-gradient(circle, #00ff88, transparent)`;
+                particle.style.setProperty('--tx', (Math.random() - 0.5) * 200 + 'px');
+                particle.style.setProperty('--ty', (Math.random() - 0.5) * 200 + 'px');
+                particle.style.animationDelay = Math.random() * 8 + 's';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                document.body.appendChild(particle);
+            }
+        }
+
+        // Neon chiziqlar
+        function createNeonLines() {
+            for(let i = 0; i < 5; i++) {
+                const line = document.createElement('div');
+                line.className = 'neon-line';
+                line.style.setProperty('--y', Math.random() * 100 + '%');
+                line.style.animationDelay = Math.random() * 4 + 's';
+                line.style.animationDuration = 3 + Math.random() * 3 + 's';
+                document.body.appendChild(line);
+            }
+        }
+
+        // Load user data
+        function loadUserData() {
+            const saved = localStorage.getItem('quizUserData');
+            if(saved) {
+                userData = JSON.parse(saved);
+            }
+            updateStatsDisplay();
+
+            // Telegram user ma'lumotlarini olish
+            if(tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                const userId = tg.initDataUnsafe.user.id;
+                // Referral kodini tekshirish
+                const urlParams = new URLSearchParams(window.location.search);
+                const ref = urlParams.get('ref');
+                if(ref && ref !== userId.toString()) {
+                    // Referral orqali kelgan
+                    const referrals = JSON.parse(localStorage.getItem('referrals') || '[]');
+                    if(!referrals.includes(ref)) {
+                        referrals.push(ref);
+                        localStorage.setItem('referrals', JSON.stringify(referrals));
+                        userData.premiumQuestions = (userData.premiumQuestions || 0) + 1;
+                        userData.totalScore += 5;
+                        saveUserData();
+                        showPremiumNotification();
+                    }
+                }
+            }
+        }
+
+        function saveUserData() {
+            localStorage.setItem('quizUserData', JSON.stringify(userData));
+            updateStatsDisplay();
+
+            // Telegram backendga yuborish
+            tg.sendData(JSON.stringify({type: 'update', data: userData}));
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('totalScore').innerText = userData.totalScore;
+            document.getElementById('quizCount').innerText = userData.quizCount;
+            document.getElementById('premiumCount').innerText = userData.premiumQuestions || 0;
+        }
+
+        function showPremiumNotification() {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, #ffd700, #ffaa00);
+                color: #000;
+                padding: 20px;
+                border-radius: 20px;
+                z-index: 1000;
+                text-align: center;
+                animation: fadeOut 3s forwards;
+            `;
+            notification.innerHTML = '✨ Siz premium savol bilan taqdirlandingiz! ✨';
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // UI render functions
+        function render() {
+            const container = document.getElementById('mainContent');
+
+            if(currentState.screen === 'main') {
+                container.innerHTML = `
+                    <div class="subjects">
+                        <div class="subject-card" onclick="selectSubject('Ingliz tili')">
+                            <div class="subject-icon">🇬🇧</div>
+                            <div class="subject-name">Ingliz tili</div>
+                            <div class="subject-desc">Grammar, Vocabulary & More</div>
+                        </div>
+                        <div class="subject-card" onclick="selectSubject('Matematika')">
+                            <div class="subject-icon">🔢</div>
+                            <div class="subject-name">Matematika</div>
+                            <div class="subject-desc">Arithmetic, Algebra & Calculus</div>
+                        </div>
+                        <div class="subject-card" onclick="selectSubject('Koreys tili')">
+                            <div class="subject-icon">🇰🇷</div>
+                            <div class="subject-name">Koreys tili</div>
+                            <div class="subject-desc">Korean Language & Culture</div>
+                        </div>
+                    </div>
+                    ${(userData.premiumQuestions > 0) ? `
+                        <button class="btn" onclick="startPremiumQuiz()">⭐ Premium Savol Ishlatish (${userData.premiumQuestions})</button>
+                    ` : ''}
+                `;
+            }
+            else if(currentState.screen === 'difficulty') {
+                container.innerHTML = `
+                    <div class="difficulty-section">
+                        <div class="difficulty-title">⚡ Qiyinlik darajasini tanlang</div>
+                        <div class="difficulty-buttons">
+                            <button class="difficulty-btn easy" onclick="startQuiz('easy')">🟢 Easy<br><small>1 ball</small></button>
+                            <button class="difficulty-btn medium" onclick="startQuiz('medium')">🟡 Medium<br><small>2 ball</small></button>
+                            <button class="difficulty-btn hard" onclick="startQuiz('hard')">🔴 Hard<br><small>3 ball</small></button>
+                        </div>
+                        <button class="btn btn-secondary" onclick="goBack()">🔙 Ortga</button>
+                    </div>
+                `;
+            }
+            else if(currentState.screen === 'quiz') {
+                const q = currentState.questions[currentState.currentQuestion];
+                const progress = `${currentState.currentQuestion + 1}/${currentState.questions.length}`;
+                container.innerHTML = `
+                    <div class="question-card">
+                        <div class="question-progress">📋 ${progress}</div>
+                        <div class="question-text">${q.q}</div>
+                        <div class="options">
+                            ${q.opts.map((opt, idx) => `
+                                <div class="option-btn" onclick="checkAnswer(${idx})">
+                                    ${String.fromCharCode(65+idx)}. ${opt}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            else if(currentState.screen === 'result') {
+                const percentage = (currentState.score / currentState.questions.length) * 100;
+                const earnedPoints = currentState.score * getPointsValue(currentState.difficulty);
+                container.innerHTML = `
+                    <div class="result-card">
+                        <div class="logo">🎉</div>
+                        <h2>Test Yakunlandi!</h2>
+                        <div class="result-score">${currentState.score}/${currentState.questions.length}</div>
+                        <div class="result-percentage">${percentage.toFixed(1)}%</div>
+                        <div>⭐ To'plangan ball: ${earnedPoints}</div>
+                        <button class="btn" onclick="resetToMain()">🔄 Yangi Test</button>
+                        <button class="btn btn-secondary" onclick="shareResult()">📤 Natijani Ulashish</button>
+                    </div>
+                `;
+            }
+        }
+
+        function getPointsValue(difficulty) {
+            const points = {easy: 1, medium: 2, hard: 3};
+            return points[difficulty] || 1;
+        }
+
+        function selectSubject(subject) {
+            currentState.subject = subject;
+            currentState.screen = 'difficulty';
+            render();
+        }
+
+        function startQuiz(difficulty) {
+            currentState.difficulty = difficulty;
+            const questions = QUESTIONS[currentState.subject][difficulty];
+            currentState.questions = [...questions];
+            // Randomize question order
+            for(let i = currentState.questions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentState.questions[i], currentState.questions[j]] = [currentState.questions[j], currentState.questions[i]];
+            }
+            currentState.currentQuestion = 0;
+            currentState.score = 0;
+            currentState.screen = 'quiz';
+            currentState.isPremiumQuiz = false;
+            render();
+        }
+
+        function startPremiumQuiz() {
+            if(userData.premiumQuestions <= 0) {
+                alert("Premium savollaringiz yo'q! Do'stingizni taklif qiling.");
+                return;
+            }
+
+            const randomPremium = PREMIUM_QUESTIONS[Math.floor(Math.random() * PREMIUM_QUESTIONS.length)];
+            currentState.questions = [randomPremium];
+            currentState.currentQuestion = 0;
+            currentState.score = 0;
+            currentState.screen = 'quiz';
+            currentState.isPremiumQuiz = true;
+            render();
+        }
+
+        function checkAnswer(selectedIdx) {
+            const q = currentState.questions[currentState.currentQuestion];
+            const selected = q.opts[selectedIdx];
+            const isCorrect = selected === q.ans;
+
+            if(isCorrect) {
+                currentState.score++;
+                showFeedback(true);
+            } else {
+                showFeedback(false, q.ans);
+            }
+
+            currentState.currentQuestion++;
+
+            if(currentState.currentQuestion >= currentState.questions.length) {
+                finishQuiz();
+            } else {
+                render();
+            }
+        }
+
+        function showFeedback(isCorrect, correctAnswer = '') {
+            const feedback = document.createElement('div');
+            feedback.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: ${isCorrect ? 'rgba(0,255,136,0.9)' : 'rgba(255,51,102,0.9)'};
+                color: ${isCorrect ? '#000' : '#fff'};
+                padding: 20px 40px;
+                border-radius: 50px;
+                font-size: 1.5rem;
+                font-weight: bold;
+                z-index: 1000;
+                animation: fadeOut 1.5s forwards;
+                text-align: center;
+            `;
+            feedback.innerHTML = isCorrect ? '✅ TO\'G\'RI!' : `❌ XATO!<br>To\'g\'ri javob: ${correctAnswer}`;
+            document.body.appendChild(feedback);
+            setTimeout(() => feedback.remove(), 1500);
+        }
+
+        function finishQuiz() {
+            const earnedPoints = currentState.score * getPointsValue(currentState.difficulty);
+            userData.totalScore += earnedPoints;
+            userData.quizCount++;
+
+            if(currentState.isPremiumQuiz) {
+                userData.premiumQuestions--;
+            }
+
+            saveUserData();
+            currentState.screen = 'result';
+            render();
+        }
+
+        function goBack() {
+            currentState.screen = 'main';
+            render();
+        }
+
+        function resetToMain() {
+            currentState = {
+                screen: 'main',
+                subject: null,
+                difficulty: null,
+                currentQuestion: 0,
+                score: 0,
+                questions: [],
+                isPremiumQuiz: false
+            };
+            render();
+        }
+
+        function shareResult() {
+            const percentage = (currentState.score / currentState.questions.length) * 100;
+            const text = `🎉 Men NEON QUIZ da ${percentage.toFixed(0)}% natija ko'rsatdim! Sen ham sinab ko'r!`;
+            tg.showAlert(text);
+
+            // Link yaratish
+            const botUsername = tg.initDataUnsafe?.user?.username || 'QuizBot';
+            const link = `https://t.me/${botUsername}?start=ref_${tg.initDataUnsafe?.user?.id}`;
+
+            const modal = document.getElementById('modal');
+            document.getElementById('shareLink').innerText = link;
+            modal.style.display = 'flex';
+        }
+
+        function copyLink() {
+            const link = document.getElementById('shareLink').innerText;
+            navigator.clipboard.writeText(link);
+            tg.showAlert('Link nusxalandi!');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        document.getElementById('premiumBadge').onclick = () => {
+            const link = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=NEON QUIZ ga qo\'shiling!`;
+            window.open(link, '_blank');
+        };
+
+        // Add animation style
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                70% { opacity: 1; }
+                100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize
+        createNeonParticles();
+        createNeonLines();
+        loadUserData();
+        render();
+    </script>
+</body>
+</html>
