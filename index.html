@@ -92,7 +92,6 @@
             padding: 8px 15px;
         }
         .currency-item { display: flex; align-items: center; gap: 6px; font-size: 1rem; font-weight: bold; }
-        .coin-icon { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
         .balance { color: #4ecdc4; }
 
         .tabs {
@@ -220,6 +219,85 @@
             text-align: center;
             margin-bottom: 20px;
         }
+        .shop-category {
+            margin-bottom: 25px;
+        }
+        .shop-category-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #4ecdc4;
+            display: inline-block;
+        }
+        .shop-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 12px 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        .shop-item:hover {
+            background: rgba(78,205,196,0.2);
+            transform: translateX(5px);
+        }
+        .shop-item-info h4 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        .shop-item-info p {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+        .shop-item-price {
+            text-align: right;
+        }
+        .price-original {
+            font-size: 0.7rem;
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+        .price-current {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffd700;
+        }
+        .discount-badge {
+            background: #ff3366;
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            margin-left: 8px;
+        }
+        .btn-shop {
+            background: linear-gradient(135deg, #4ecdc4, #45b7d1);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-shop:hover { transform: scale(1.05); }
+        .btn-shop:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .vip-badge {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
         .wheel-wrapper {
             position: relative;
             width: 300px;
@@ -245,7 +323,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             text-align: center;
             padding: 5px;
@@ -320,7 +398,6 @@
         }
         .btn:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(78,205,196,0.5); }
         .btn-secondary { background: linear-gradient(135deg, #ff6b6b, #ff4757); }
-        .btn-gold { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; }
 
         .modal {
             display: none;
@@ -364,15 +441,6 @@
         }
         .stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .file-input { display: none; }
-        .shop-item {
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            padding: 12px;
-            margin: 10px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
 
         .win-overlay {
             position: fixed;
@@ -383,7 +451,7 @@
             color: #000;
             padding: 20px 40px;
             border-radius: 50px;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
             z-index: 2000;
             animation: winPulse 0.5s ease-in-out 3;
@@ -398,6 +466,11 @@
             0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
             100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
         }
+
+        .boost-active {
+            background: rgba(0,255,136,0.2);
+            border: 1px solid #00ff88;
+        }
     </style>
 </head>
 <body>
@@ -409,8 +482,8 @@
             </div>
             <div class="currency-panel">
                 <div class="currency-item"><span>⭐</span><span class="balance" id="totalScore">0</span></div>
-                <div class="currency-item"><span class="coin-icon">🪙</span><span class="balance" id="totalCoins">0</span></div>
                 <div class="currency-item"><span>🎫</span><span class="balance" id="totalTokens">0</span></div>
+                <div class="currency-item"><span>👑</span><span class="balance" id="vipBadge"></span></div>
             </div>
         </div>
 
@@ -423,7 +496,7 @@
         <div class="stats-panel">
             <div class="stat-item"><div class="stat-value" id="quizCount">0</div><div class="stat-label">Testlar</div></div>
             <div class="stat-item"><div class="stat-value" id="premiumCount">0</div><div class="stat-label">Premium</div></div>
-            <div class="stat-item"><div class="stat-value" id="avgPercent">0%</div><div class="stat-label">O'rtacha</div></div>
+            <div class="stat-item"><div class="stat-value" id="boostMultiplier">1x</div><div class="stat-label">Boost</div></div>
         </div>
 
         <div id="mainContent"></div>
@@ -436,10 +509,10 @@
             <h3 id="modalUserName">User</h3>
             <div class="profile-stats">
                 <div class="stat-row"><span>⭐ Ball:</span><span id="modalTotalScore">0</span></div>
-                <div class="stat-row"><span>🪙 Tanga:</span><span id="modalCoins">0</span></div>
                 <div class="stat-row"><span>🎫 Token:</span><span id="modalTokens">0</span></div>
                 <div class="stat-row"><span>📝 Testlar:</span><span id="modalQuizCount">0</span></div>
                 <div class="stat-row"><span>🏆 Eng yaxshi:</span><span id="modalBestScore">0%</span></div>
+                <div class="stat-row"><span>👑 VIP:</span><span id="modalVipStatus">Yo'q</span></div>
             </div>
             <button class="btn" onclick="closeProfileModal()">Yopish</button>
         </div>
@@ -579,6 +652,40 @@
             {q: "⭐ PREMIUM: 'Mona Lisa' rasmining muallifi?", opts: ["Van Gog", "Leonardo da Vinci", "Pablo Picasso", "Rembrandt"], ans: "Leonardo da Vinci"}
         ];
 
+        // ==================== DO'KON MA'LUMOTLARI ====================
+        const SHOP_ITEMS = {
+            boosts: [
+                { id: "boost_2x_1h", name: "+2x ball (1 soat)", price: 200, duration: 3600, multiplier: 2, desc: "1 soat davomida ballar 2 barobar" },
+                { id: "boost_3x_30m", name: "+3x ball (30 min)", price: 350, duration: 1800, multiplier: 3, desc: "30 daqiqa davomida ballar 3 barobar" },
+                { id: "help_50", name: "50/50 yordam", price: 150, type: "help", desc: "2 ta noto'g'ri javobni olib tashlaydi" },
+                { id: "skip", name: "Savolni o'tkazib yuborish", price: 100, type: "skip", desc: "Joriy savolni o'tkazib yuborish" },
+                { id: "extra_time", name: "Qo'shimcha vaqt (30s)", price: 120, type: "time", desc: "Har bir savolga +30 soniya" }
+            ],
+            quiz_powers: [
+                { id: "premium_pack", name: "Premium savollar pack", price: 500, reward: { premium: 5 }, desc: "5 ta premium savol" },
+                { id: "hard_unlock", name: "Hard mode unlock", price: 800, type: "hard_unlock", desc: "Qiyin rejimni ochish" },
+                { id: "daily_challenge", name: "Daily challenge access", price: 300, type: "daily", desc: "Kunlik challenge" }
+            ],
+            vip: [
+                { id: "vip_1d", name: "VIP 1 kun", price: 1000, duration: 86400, benefits: ["double_reward", "exclusive_questions", "profile_badge"], desc: "1 kun VIP imtiyozlari" },
+                { id: "vip_7d", name: "VIP 7 kun", price: 5000, duration: 604800, benefits: ["double_reward", "exclusive_questions", "profile_badge"], desc: "7 kun VIP imtiyozlari" },
+                { id: "vip_30d", name: "VIP 30 kun", price: 15000, duration: 2592000, benefits: ["double_reward", "exclusive_questions", "profile_badge"], desc: "30 kun VIP imtiyozlari" }
+            ],
+            special: [
+                { id: "mystery_box", name: "Mystery box", price: 250, type: "mystery", desc: "Tasodifiy sovrin" },
+                { id: "lucky_box", name: "Lucky box", price: 400, type: "lucky", desc: "Yuqori sovrinli tasodifiy sovrin" },
+                { id: "random_pack", name: "Random reward pack", price: 300, type: "random", desc: "Tasodifiy token/ball paketi" }
+            ]
+        };
+
+        const MYSTERY_REWARDS = [
+            { name: "50 Token", tokens: 50, chance: 30 },
+            { name: "100 Token", tokens: 100, chance: 20 },
+            { name: "30 Ball", points: 30, chance: 25 },
+            { name: "Premium Savol", premium: 1, chance: 15 },
+            { name: "200 Token", tokens: 200, chance: 10 }
+        ];
+
         // ==================== BARABAN MA'LUMOTLARI ====================
         const FREE_WHEEL_ITEMS = [
             { name: "100 Token", chance: 2, color: "#ff0000", reward: { tokens: 100 } },
@@ -603,10 +710,13 @@
             totalScore: 0,
             quizCount: 0,
             premiumQuestions: 0,
-            coins: 0,
             tokens: 0,
             bestPercentage: 0,
             lastFreeSpin: null,
+            history: [],
+            activeBoosts: [], // { type, multiplier, endTime }
+            vip: null, // { endTime, benefits }
+            hardUnlocked: false,
             history: []
         };
 
@@ -619,17 +729,62 @@
             questions: [],
             isPremiumQuiz: false,
             activeTab: 'home',
-            isSpinning: false
+            isSpinning: false,
+            currentBoostMultiplier: 1
         };
 
         let tgUser = null;
         let userAvatar = null;
 
+        // Haftalik chegirma (Payshanba - Thursday)
+        function isDiscountDay() {
+            const today = new Date();
+            return today.getDay() === 4; // 4 = Thursday
+        }
+
+        function getDiscountedPrice(price) {
+            if (isDiscountDay()) {
+                return Math.floor(price * 0.8); // 20% chegirma
+            }
+            return price;
+        }
+
+        // Boost va VIP tekshirish
+        function updateActiveBoost() {
+            const now = Date.now() / 1000;
+            let activeMultiplier = 1;
+            
+            userData.activeBoosts = (userData.activeBoosts || []).filter(boost => boost.endTime > now);
+            
+            for (const boost of (userData.activeBoosts || [])) {
+                if (boost.multiplier && boost.multiplier > activeMultiplier) {
+                    activeMultiplier = boost.multiplier;
+                }
+            }
+            
+            // VIP double reward
+            if (userData.vip && userData.vip.endTime > now) {
+                currentState.vipActive = true;
+                document.getElementById('vipBadge').innerHTML = '👑';
+            } else {
+                currentState.vipActive = false;
+                document.getElementById('vipBadge').innerHTML = '';
+            }
+            
+            currentState.currentBoostMultiplier = activeMultiplier;
+            document.getElementById('boostMultiplier').innerText = activeMultiplier + 'x';
+            
+            saveUserData();
+        }
+
         function loadUserData() {
-            const saved = localStorage.getItem('quizUserData_neon_final');
+            const saved = localStorage.getItem('quizUserData_neon_v4');
             if(saved) {
                 userData = JSON.parse(saved);
             }
+            if (!userData.activeBoosts) userData.activeBoosts = [];
+            if (!userData.history) userData.history = [];
+            
             if(tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 tgUser = tg.initDataUnsafe.user;
                 document.getElementById('profileName').innerHTML = `${tgUser.first_name || 'User'}<br><small>@${tgUser.username || ''}</small>`;
@@ -639,17 +794,17 @@
                     updateAvatarDisplay();
                 }
             }
+            updateActiveBoost();
             updateStatsDisplay();
         }
 
         function saveUserData() {
-            localStorage.setItem('quizUserData_neon_final', JSON.stringify(userData));
+            localStorage.setItem('quizUserData_neon_v4', JSON.stringify(userData));
             updateStatsDisplay();
         }
 
         function updateStatsDisplay() {
             document.getElementById('totalScore').innerText = userData.totalScore;
-            document.getElementById('totalCoins').innerText = userData.coins || 0;
             document.getElementById('totalTokens').innerText = userData.tokens || 0;
             document.getElementById('quizCount').innerText = userData.quizCount;
             document.getElementById('premiumCount').innerText = userData.premiumQuestions || 0;
@@ -679,6 +834,98 @@
                 notif.style.animation = 'fadeOut 1s forwards';
                 setTimeout(() => notif.remove(), 1000);
             }, 2500);
+        }
+
+        // ==================== DO'KON FUNKSIYALARI ====================
+        function buyItem(item, category) {
+            let price = item.price;
+            if (isDiscountDay()) {
+                price = Math.floor(price * 0.8);
+            }
+            
+            if ((userData.tokens || 0) < price) {
+                showNotification(`Token yetarli emas! ${price} token kerak.`, false);
+                return;
+            }
+            
+            userData.tokens -= price;
+            
+            if (category === 'boosts') {
+                if (item.multiplier) {
+                    const endTime = (Date.now() / 1000) + item.duration;
+                    userData.activeBoosts.push({
+                        type: item.id,
+                        multiplier: item.multiplier,
+                        endTime: endTime
+                    });
+                    showNotification(`${item.name} faollashtirildi! ${item.multiplier}x ball!`);
+                } else if (item.type === 'help') {
+                    // 50/50 yordam
+                    showNotification(`${item.name} sotib olindi! Keyingi savolda ishlatishingiz mumkin.`);
+                } else if (item.type === 'skip') {
+                    showNotification(`${item.name} sotib olindi! Keyingi savolda o'tkazib yuborishingiz mumkin.`);
+                } else if (item.type === 'time') {
+                    showNotification(`${item.name} sotib olindi! Qo'shimcha vaqt qo'shildi.`);
+                }
+            } 
+            else if (category === 'quiz_powers') {
+                if (item.reward) {
+                    if (item.reward.premium) {
+                        userData.premiumQuestions = (userData.premiumQuestions || 0) + item.reward.premium;
+                        showNotification(`${item.reward.premium} ta premium savol qo'shildi!`);
+                    }
+                }
+                if (item.type === 'hard_unlock') {
+                    userData.hardUnlocked = true;
+                    showNotification("Qiyin rejim ochildi!");
+                }
+            }
+            else if (category === 'vip') {
+                const endTime = (Date.now() / 1000) + item.duration;
+                userData.vip = {
+                    endTime: endTime,
+                    benefits: item.benefits
+                };
+                showNotification(`${item.name} sotib olindi! VIP imtiyozlari faollashtirildi!`);
+            }
+            else if (category === 'special') {
+                let reward = getRandomReward(item.type);
+                if (reward.tokens) {
+                    userData.tokens = (userData.tokens || 0) + reward.tokens;
+                    showNotification(`${reward.name}: ${reward.tokens} token yutdingiz!`);
+                } else if (reward.points) {
+                    userData.totalScore += reward.points;
+                    showNotification(`${reward.name}: ${reward.points} ball yutdingiz!`);
+                } else if (reward.premium) {
+                    userData.premiumQuestions = (userData.premiumQuestions || 0) + reward.premium;
+                    showNotification(`${reward.name}: Premium savol yutdingiz!`);
+                }
+            }
+            
+            updateActiveBoost();
+            saveUserData();
+            if (currentState.activeTab === 'shop') renderShop();
+        }
+
+        function getRandomReward(type) {
+            let rewards = [];
+            if (type === 'mystery') rewards = MYSTERY_REWARDS;
+            else if (type === 'lucky') {
+                rewards = MYSTERY_REWARDS.map(r => ({ ...r, chance: r.chance * 1.5 }));
+            } else if (type === 'random') {
+                return { name: "Random Paket", tokens: Math.floor(Math.random() * 100) + 20 };
+            }
+            
+            const totalChance = rewards.reduce((sum, r) => sum + r.chance, 0);
+            let random = Math.random() * totalChance;
+            let current = 0;
+            for (const reward of rewards) {
+                current += reward.chance;
+                if (random <= current) {
+                    return reward;
+                }
+            }
+            return rewards[0];
         }
 
         // ==================== BARABAN FUNKSIYALARI ====================
@@ -711,9 +958,6 @@
             return segments[0];
         }
 
-        let currentWheel = null;
-        let currentSpinType = null;
-
         async function spinWheel(wheelType) {
             if (currentState.isSpinning) {
                 showNotification("Baraban aylanmoqda, kuting!", false);
@@ -743,7 +987,6 @@
             }
             
             currentState.isSpinning = true;
-            currentSpinType = wheelType;
             
             const segments = createWheelSegments(items);
             const wheelElement = document.getElementById('activeWheel');
@@ -756,28 +999,21 @@
             
             if (spinBtn) spinBtn.disabled = true;
             
-            // Reset animation
             wheelElement.style.transition = 'none';
             wheelElement.style.transform = 'rotate(0deg)';
-            
-            // Force reflow
             wheelElement.offsetHeight;
             
-            // Start animation
             const spins = 8 + Math.random() * 4;
             const finalAngle = 360 * spins + Math.random() * 360;
             
             wheelElement.style.transition = 'transform 4s cubic-bezier(0.2, 0.9, 0.1, 1.1)';
             wheelElement.style.transform = `rotate(${finalAngle}deg)`;
             
-            // Wait for animation
             await new Promise(resolve => setTimeout(resolve, 4000));
             
-            // Calculate result
             const actualAngle = finalAngle % 360;
             const selectedSegment = getRewardAtAngle(segments, actualAngle);
             
-            // Apply reward
             if (isFree) {
                 userData.lastFreeSpin = new Date().toISOString();
             } else {
@@ -846,7 +1082,7 @@
                         <div class="difficulty-buttons">
                             <button class="difficulty-btn easy" onclick="window.startQuiz('easy')">🟢 Oson<br><small>1 ball</small></button>
                             <button class="difficulty-btn medium" onclick="window.startQuiz('medium')">🟡 O'rta<br><small>2 ball</small></button>
-                            <button class="difficulty-btn hard" onclick="window.startQuiz('hard')">🔴 Qiyin<br><small>3 ball</small></button>
+                            ${userData.hardUnlocked ? `<button class="difficulty-btn hard" onclick="window.startQuiz('hard')">🔴 Qiyin<br><small>3 ball</small></button>` : `<button class="difficulty-btn hard" style="opacity:0.5" disabled>🔴 Qiyin (Do'kondan oching)</button>`}
                         </div>
                         <button class="btn btn-secondary" onclick="window.goBack()">🔙 Ortga</button>
                     </div>
@@ -865,14 +1101,17 @@
                 `;
             } else if (currentState.screen === 'result') {
                 const percentage = (currentState.score / currentState.questions.length) * 100;
-                const earnedPoints = currentState.score * window.getPointsValue(currentState.difficulty);
+                let earnedPoints = currentState.score * window.getPointsValue(currentState.difficulty);
+                earnedPoints = Math.floor(earnedPoints * currentState.currentBoostMultiplier);
+                if (currentState.vipActive) earnedPoints = Math.floor(earnedPoints * 2);
+                
                 container.innerHTML = `
                     <div class="result-card">
                         <div class="logo">🎉</div>
                         <h2>Test Yakunlandi!</h2>
                         <div class="result-score">${currentState.score}/${currentState.questions.length}</div>
                         <div class="result-percentage">${percentage.toFixed(1)}%</div>
-                        <div>⭐ To'plangan ball: ${earnedPoints}</div>
+                        <div>⭐ To'plangan ball: ${earnedPoints} ${currentState.currentBoostMultiplier > 1 ? `(x${currentState.currentBoostMultiplier} boost)` : ''}</div>
                         <button class="btn" onclick="window.resetToMain()">🔄 Yangi Test</button>
                     </div>
                 `;
@@ -931,7 +1170,6 @@
                 </div>
             `;
             
-            // Setup spin buttons
             const freeBtn = document.getElementById('freeSpinBtn');
             const tokenBtn = document.getElementById('tokenSpinBtn');
             const freeWheel = document.getElementById('freeWheel');
@@ -957,70 +1195,121 @@
 
         function renderShop() {
             const container = clearMainContent();
+            const discountActive = isDiscountDay();
+            const discountText = discountActive ? ' 🔥 PAYSHANBA CHEGIRMA 20%!' : '';
+            
+            let boostsHtml = '', quizHtml = '', vipHtml = '', specialHtml = '';
+            
+            SHOP_ITEMS.boosts.forEach(item => {
+                const price = getDiscountedPrice(item.price);
+                const originalPrice = item.price;
+                boostsHtml += `
+                    <div class="shop-item">
+                        <div class="shop-item-info">
+                            <h4>⚡ ${item.name}</h4>
+                            <p>${item.desc}</p>
+                        </div>
+                        <div class="shop-item-price">
+                            ${discountActive && originalPrice !== price ? `<div class="price-original">${originalPrice} 🎫</div>` : ''}
+                            <div class="price-current">${price} 🎫</div>
+                            <button class="btn-shop" onclick="window.buyShopItem('${item.id}', 'boosts')">Sotib olish</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            SHOP_ITEMS.quiz_powers.forEach(item => {
+                const price = getDiscountedPrice(item.price);
+                const originalPrice = item.price;
+                quizHtml += `
+                    <div class="shop-item">
+                        <div class="shop-item-info">
+                            <h4>🎓 ${item.name}</h4>
+                            <p>${item.desc}</p>
+                        </div>
+                        <div class="shop-item-price">
+                            ${discountActive && originalPrice !== price ? `<div class="price-original">${originalPrice} 🎫</div>` : ''}
+                            <div class="price-current">${price} 🎫</div>
+                            <button class="btn-shop" onclick="window.buyShopItem('${item.id}', 'quiz_powers')">Sotib olish</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            SHOP_ITEMS.vip.forEach(item => {
+                const price = getDiscountedPrice(item.price);
+                const originalPrice = item.price;
+                vipHtml += `
+                    <div class="shop-item">
+                        <div class="shop-item-info">
+                            <h4>👑 ${item.name}</h4>
+                            <p>${item.desc}</p>
+                        </div>
+                        <div class="shop-item-price">
+                            ${discountActive && originalPrice !== price ? `<div class="price-original">${originalPrice} 🎫</div>` : ''}
+                            <div class="price-current">${price} 🎫</div>
+                            <button class="btn-shop" onclick="window.buyShopItem('${item.id}', 'vip')">Sotib olish</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            SHOP_ITEMS.special.forEach(item => {
+                const price = getDiscountedPrice(item.price);
+                const originalPrice = item.price;
+                specialHtml += `
+                    <div class="shop-item">
+                        <div class="shop-item-info">
+                            <h4>🎁 ${item.name}</h4>
+                            <p>${item.desc}</p>
+                        </div>
+                        <div class="shop-item-price">
+                            ${discountActive && originalPrice !== price ? `<div class="price-original">${originalPrice} 🎫</div>` : ''}
+                            <div class="price-current">${price} 🎫</div>
+                            <button class="btn-shop" onclick="window.buyShopItem('${item.id}', 'special')">Sotib olish</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
             container.innerHTML = `
                 <div class="wheel-container">
-                    <h3>🛍 Valyuta Almashtirish</h3>
-                    <div class="shop-item">
-                        <div class="shop-item-info">⭐ Ball → 🎫 Token</div>
-                        <button class="btn-gold" style="padding:8px 15px;width:auto" onclick="window.exchangePointsToTokens()">10 Ball = 1 Token</button>
+                    <h3>🛍 DO'KON ${discountText}</h3>
+                    <div class="shop-category">
+                        <div class="shop-category-title">⚡ BOOSTLAR</div>
+                        ${boostsHtml}
                     </div>
-                    <div class="shop-item">
-                        <div class="shop-item-info">🎫 Token → 🪙 Tanga</div>
-                        <button class="btn-gold" style="padding:8px 15px;width:auto" onclick="window.exchangeTokensToCoins()">50 Token = 1 Tanga</button>
+                    <div class="shop-category">
+                        <div class="shop-category-title">🎓 QUIZ POWERLAR</div>
+                        ${quizHtml}
                     </div>
-                    <div class="shop-item">
-                        <div class="shop-item-info">⭐ Premium Savol Sotib Olish</div>
-                        <button class="btn-gold" style="padding:8px 15px;width:auto" onclick="window.buyPremiumQuestion()">30 Tanga</button>
+                    <div class="shop-category">
+                        <div class="shop-category-title">👑 VIP TIZIMI</div>
+                        ${vipHtml}
+                    </div>
+                    <div class="shop-category">
+                        <div class="shop-category-title">🎁 MAXSUS ITEMLAR</div>
+                        ${specialHtml}
                     </div>
                     <div class="spin-info" style="margin-top:20px">
                         📊 Sizning balansingiz:<br>
                         ⭐ Ball: ${userData.totalScore}<br>
                         🎫 Token: ${userData.tokens || 0}<br>
-                        🪙 Tanga: ${userData.coins || 0}
+                        👑 VIP: ${userData.vip && userData.vip.endTime > Date.now()/1000 ? 'Faol' : 'Faol emas'}<br>
+                        ⚡ Boost: ${currentState.currentBoostMultiplier}x
                     </div>
                 </div>
             `;
         }
 
-        function exchangePointsToTokens() {
-            if (userData.totalScore < 10) {
-                showNotification("Kamida 10 ball kerak!", false);
-                return;
-            }
-            const exchangeCount = Math.floor(userData.totalScore / 10);
-            const earnedTokens = exchangeCount;
-            userData.totalScore -= exchangeCount * 10;
-            userData.tokens = (userData.tokens || 0) + earnedTokens;
-            saveUserData();
-            showNotification(`${exchangeCount * 10} ball → ${earnedTokens} tokenga almashtirildi!`);
-            if (currentState.activeTab === 'shop') renderShop();
-        }
-
-        function exchangeTokensToCoins() {
-            if ((userData.tokens || 0) < 50) {
-                showNotification("Kamida 50 token kerak!", false);
-                return;
-            }
-            const exchangeCount = Math.floor(userData.tokens / 50);
-            const earnedCoins = exchangeCount;
-            userData.tokens -= exchangeCount * 50;
-            userData.coins = (userData.coins || 0) + earnedCoins;
-            saveUserData();
-            showNotification(`${exchangeCount * 50} token → ${earnedCoins} tangaga almashtirildi!`);
-            if (currentState.activeTab === 'shop') renderShop();
-        }
-
-        function buyPremiumQuestion() {
-            if ((userData.coins || 0) < 30) {
-                showNotification("30 tanga yetarli emas!", false);
-                return;
-            }
-            userData.coins -= 30;
-            userData.premiumQuestions = (userData.premiumQuestions || 0) + 1;
-            saveUserData();
-            showNotification("Premium savol sotib oldingiz!");
-            if (currentState.activeTab === 'shop') renderShop();
-            else if (currentState.activeTab === 'home') renderHome();
+        function buyShopItem(itemId, category) {
+            let item = null;
+            if (category === 'boosts') item = SHOP_ITEMS.boosts.find(i => i.id === itemId);
+            else if (category === 'quiz_powers') item = SHOP_ITEMS.quiz_powers.find(i => i.id === itemId);
+            else if (category === 'vip') item = SHOP_ITEMS.vip.find(i => i.id === itemId);
+            else if (category === 'special') item = SHOP_ITEMS.special.find(i => i.id === itemId);
+            
+            if (item) buyItem(item, category);
         }
 
         function getPointsValue(difficulty) {
@@ -1085,11 +1374,21 @@
         }
 
         function finishQuiz() {
-            const earnedPoints = currentState.score * getPointsValue(currentState.difficulty);
+            let earnedPoints = currentState.score * getPointsValue(currentState.difficulty);
+            earnedPoints = Math.floor(earnedPoints * currentState.currentBoostMultiplier);
+            if (currentState.vipActive) earnedPoints = Math.floor(earnedPoints * 2);
+            
             const percentage = (currentState.score / currentState.questions.length) * 100;
             
             userData.totalScore += earnedPoints;
             userData.quizCount++;
+            
+            // Token qo'shish (10 ball = 1 token)
+            const earnedTokens = Math.floor(earnedPoints / 10);
+            if (earnedTokens > 0) {
+                userData.tokens = (userData.tokens || 0) + earnedTokens;
+                showNotification(`+${earnedTokens} Token qo'shildi!`);
+            }
             
             if(currentState.isPremiumQuiz) {
                 userData.totalScore += 150;
@@ -1130,8 +1429,11 @@
                 questions: [],
                 isPremiumQuiz: false,
                 activeTab: currentState.activeTab,
-                isSpinning: false
+                isSpinning: false,
+                currentBoostMultiplier: currentState.currentBoostMultiplier,
+                vipActive: currentState.vipActive
             };
+            updateActiveBoost();
             if (currentState.activeTab === 'home') renderHome();
             else if (currentState.activeTab === 'games') renderGames();
             else renderShop();
@@ -1141,10 +1443,10 @@
         function openProfileModal() {
             document.getElementById('modalUserName').innerText = tgUser ? tgUser.first_name : 'User';
             document.getElementById('modalTotalScore').innerText = userData.totalScore;
-            document.getElementById('modalCoins').innerText = userData.coins || 0;
             document.getElementById('modalTokens').innerText = userData.tokens || 0;
             document.getElementById('modalQuizCount').innerText = userData.quizCount;
             document.getElementById('modalBestScore').innerText = userData.bestPercentage + '%';
+            document.getElementById('modalVipStatus').innerHTML = (userData.vip && userData.vip.endTime > Date.now()/1000) ? 'Faol 👑' : 'Faol emas';
             document.getElementById('profileModal').style.display = 'flex';
         }
 
@@ -1224,9 +1526,7 @@
         window.goBack = goBack;
         window.resetToMain = resetToMain;
         window.getPointsValue = getPointsValue;
-        window.exchangePointsToTokens = exchangePointsToTokens;
-        window.exchangeTokensToCoins = exchangeTokensToCoins;
-        window.buyPremiumQuestion = buyPremiumQuestion;
+        window.buyShopItem = buyShopItem;
         window.spinWheel = spinWheel;
         window.showNotification = showNotification;
     </script>
