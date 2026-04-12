@@ -20,7 +20,6 @@
             color: #fff;
         }
 
-        /* Neon zarralar */
         .neon-particle {
             position: fixed;
             pointer-events: none;
@@ -47,7 +46,6 @@
             min-height: 100vh;
         }
 
-        /* Header */
         .header {
             display: flex;
             justify-content: space-between;
@@ -85,7 +83,6 @@
         .profile-name { font-weight: bold; font-size: 0.9rem; }
         .profile-name small { font-size: 0.7rem; opacity: 0.7; }
 
-        /* Valyuta paneli */
         .currency-panel {
             display: flex;
             gap: 15px;
@@ -98,7 +95,6 @@
         .coin-icon { color: #ffd700; text-shadow: 0 0 10px #ffd700; }
         .balance { color: #4ecdc4; }
 
-        /* Tabs */
         .tabs {
             display: flex;
             gap: 10px;
@@ -121,7 +117,6 @@
             box-shadow: 0 0 20px rgba(78,205,196,0.5);
         }
 
-        /* Stats panel */
         .stats-panel {
             background: rgba(255,255,255,0.05);
             backdrop-filter: blur(10px);
@@ -136,7 +131,6 @@
         .stat-value { font-size: 1.3rem; font-weight: bold; color: #4ecdc4; text-shadow: 0 0 10px #4ecdc4; }
         .stat-label { font-size: 0.7rem; opacity: 0.7; }
 
-        /* Subject cards */
         .subjects {
             display: grid;
             gap: 15px;
@@ -161,7 +155,6 @@
         .subject-name { font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; }
         .subject-desc { font-size: 0.8rem; opacity: 0.7; }
 
-        /* Difficulty buttons */
         .difficulty-section {
             background: rgba(255,255,255,0.05);
             backdrop-filter: blur(10px);
@@ -185,7 +178,6 @@
         .difficulty-btn.hard { background: linear-gradient(135deg, #ff3366, #cc0044); color: #fff; }
         .difficulty-btn:hover { transform: scale(1.05); }
 
-        /* Question card */
         .question-card {
             background: rgba(0,0,0,0.6);
             backdrop-filter: blur(20px);
@@ -209,7 +201,6 @@
         }
         .option-btn:hover { background: rgba(78,205,196,0.2); transform: translateX(10px); }
 
-        /* Result card */
         .result-card {
             text-align: center;
             background: rgba(0,0,0,0.6);
@@ -221,7 +212,6 @@
         .result-score { font-size: 3rem; color: #4ecdc4; text-shadow: 0 0 30px #4ecdc4; margin: 20px 0; }
         .result-percentage { font-size: 2rem; margin: 10px 0; }
 
-        /* Wheel styles */
         .wheel-container {
             background: rgba(0,0,0,0.4);
             backdrop-filter: blur(10px);
@@ -315,7 +305,6 @@
             border-radius: 15px;
         }
 
-        /* Buttons */
         .btn {
             background: linear-gradient(135deg, #4ecdc4, #45b7d1);
             border: none;
@@ -333,7 +322,6 @@
         .btn-secondary { background: linear-gradient(135deg, #ff6b6b, #ff4757); }
         .btn-gold { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -386,7 +374,6 @@
             align-items: center;
         }
 
-        /* Win animation */
         .win-overlay {
             position: fixed;
             top: 50%;
@@ -415,7 +402,6 @@
 </head>
 <body>
     <div class="container" id="app">
-        <!-- Header -->
         <div class="header">
             <div class="profile-section" id="profileBtn">
                 <div class="profile-avatar" id="profileAvatar">👤</div>
@@ -428,25 +414,21 @@
             </div>
         </div>
 
-        <!-- Tabs -->
         <div class="tabs">
             <button class="tab-btn active" id="tabHome">🏠 Savollar</button>
             <button class="tab-btn" id="tabGames">🎰 Baraban</button>
             <button class="tab-btn" id="tabShop">🛍 Do'kon</button>
         </div>
 
-        <!-- Stats Panel -->
         <div class="stats-panel">
             <div class="stat-item"><div class="stat-value" id="quizCount">0</div><div class="stat-label">Testlar</div></div>
             <div class="stat-item"><div class="stat-value" id="premiumCount">0</div><div class="stat-label">Premium</div></div>
             <div class="stat-item"><div class="stat-value" id="avgPercent">0%</div><div class="stat-label">O'rtacha</div></div>
         </div>
 
-        <!-- Main Content -->
         <div id="mainContent"></div>
     </div>
 
-    <!-- Profile Modal -->
     <div class="modal" id="profileModal">
         <div class="modal-content">
             <div class="profile-avatar-large" id="profileAvatarLarge" onclick="document.getElementById('avatarInput').click()">👤</div>
@@ -468,7 +450,7 @@
         tg.expand();
         tg.enableClosingConfirmation();
 
-        // ==================== O'ZBEKCHA SAVOLLAR ====================
+        // ==================== SAVOLLAR ====================
         const QUESTIONS = {
             "Ingliz tili": {
                 icon: "🇺🇸",
@@ -589,7 +571,6 @@
             }
         };
 
-        // Premium savollar
         const PREMIUM_QUESTIONS = [
             {q: "⭐ PREMIUM: Frantsiyaning poytaxti qayer?", opts: ["London", "Berlin", "Parij", "Madrid"], ans: "Parij"},
             {q: "⭐ PREMIUM: 'Romeo va Julietta'ni kim yozgan?", opts: ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"], ans: "William Shakespeare"},
@@ -644,9 +625,8 @@
         let tgUser = null;
         let userAvatar = null;
 
-        // ==================== FUNKSIYALAR ====================
         function loadUserData() {
-            const saved = localStorage.getItem('quizUserData_neon_v3');
+            const saved = localStorage.getItem('quizUserData_neon_final');
             if(saved) {
                 userData = JSON.parse(saved);
             }
@@ -663,7 +643,7 @@
         }
 
         function saveUserData() {
-            localStorage.setItem('quizUserData_neon_v3', JSON.stringify(userData));
+            localStorage.setItem('quizUserData_neon_final', JSON.stringify(userData));
             updateStatsDisplay();
         }
 
@@ -690,10 +670,10 @@
             });
         }
 
-        function showWinNotification(msg) {
+        function showNotification(msg, isWin = true) {
             const notif = document.createElement('div');
             notif.className = 'win-overlay';
-            notif.innerHTML = `🎉 ${msg} 🎉`;
+            notif.innerHTML = isWin ? `🎉 ${msg} 🎉` : msg;
             document.body.appendChild(notif);
             setTimeout(() => {
                 notif.style.animation = 'fadeOut 1s forwards';
@@ -707,7 +687,7 @@
             let currentAngle = 0;
             const segments = [];
             
-            items.forEach((item, index) => {
+            items.forEach((item) => {
                 const angle = (item.chance / totalChance) * 360;
                 segments.push({
                     name: item.name,
@@ -719,7 +699,6 @@
                 });
                 currentAngle += angle;
             });
-            
             return segments;
         }
 
@@ -732,9 +711,12 @@
             return segments[0];
         }
 
+        let currentWheel = null;
+        let currentSpinType = null;
+
         async function spinWheel(wheelType) {
             if (currentState.isSpinning) {
-                showWinNotification("Baraban aylanmoqda, kuting!");
+                showNotification("Baraban aylanmoqda, kuting!", false);
                 return;
             }
             
@@ -745,7 +727,7 @@
                     const lastSpin = new Date(userData.lastFreeSpin);
                     const today = new Date();
                     if (lastSpin.toDateString() === today.toDateString()) {
-                        showWinNotification("Bugun bepul spinningizni ishlatgansiz! Ertaga qaytib keling.");
+                        showNotification("Bugun bepul spinningizni ishlatgansiz! Ertaga qaytib keling.", false);
                         return;
                     }
                 }
@@ -753,7 +735,7 @@
                 isFree = true;
             } else {
                 if ((userData.tokens || 0) < 200) {
-                    showWinNotification("Token yetarli emas! 200 token kerak.");
+                    showNotification("Token yetarli emas! 200 token kerak.", false);
                     return;
                 }
                 items = TOKEN_WHEEL_ITEMS;
@@ -761,27 +743,41 @@
             }
             
             currentState.isSpinning = true;
+            currentSpinType = wheelType;
             
             const segments = createWheelSegments(items);
-            const wheelElement = document.getElementById('wheel');
-            const spinBtn = document.getElementById('spinBtn');
+            const wheelElement = document.getElementById('activeWheel');
+            const spinBtn = document.getElementById('spinBtnActive');
+            
+            if (!wheelElement) {
+                currentState.isSpinning = false;
+                return;
+            }
+            
             if (spinBtn) spinBtn.disabled = true;
             
-            // Aylanish
+            // Reset animation
+            wheelElement.style.transition = 'none';
+            wheelElement.style.transform = 'rotate(0deg)';
+            
+            // Force reflow
+            wheelElement.offsetHeight;
+            
+            // Start animation
             const spins = 8 + Math.random() * 4;
             const finalAngle = 360 * spins + Math.random() * 360;
             
             wheelElement.style.transition = 'transform 4s cubic-bezier(0.2, 0.9, 0.1, 1.1)';
             wheelElement.style.transform = `rotate(${finalAngle}deg)`;
             
-            // 4 soniya kutamiz
+            // Wait for animation
             await new Promise(resolve => setTimeout(resolve, 4000));
             
-            // Qaysi segmentga tushganini aniqlash
+            // Calculate result
             const actualAngle = finalAngle % 360;
             const selectedSegment = getRewardAtAngle(segments, actualAngle);
             
-            // Yutuqni qo'shish
+            // Apply reward
             if (isFree) {
                 userData.lastFreeSpin = new Date().toISOString();
             } else {
@@ -803,7 +799,7 @@
             }
             
             saveUserData();
-            showWinNotification(winText);
+            showNotification(winText);
             
             setTimeout(() => {
                 if (spinBtn) spinBtn.disabled = false;
@@ -813,39 +809,46 @@
         }
 
         // ==================== UI RENDER ====================
-        function renderHome() {
+        function clearMainContent() {
             const container = document.getElementById('mainContent');
+            container.innerHTML = '';
+            return container;
+        }
+
+        function renderHome() {
+            const container = clearMainContent();
+            
             if (currentState.screen === 'main') {
                 container.innerHTML = `
                     <div class="subjects">
-                        <div class="subject-card" onclick="selectSubject('Ingliz tili')">
+                        <div class="subject-card" onclick="window.selectSubject('Ingliz tili')">
                             <div class="subject-icon">🇺🇸</div>
                             <div class="subject-name">Ingliz tili</div>
                             <div class="subject-desc">Grammar, Vocabulary & More</div>
                         </div>
-                        <div class="subject-card" onclick="selectSubject('Matematika')">
+                        <div class="subject-card" onclick="window.selectSubject('Matematika')">
                             <div class="subject-icon">🔢</div>
                             <div class="subject-name">Matematika</div>
                             <div class="subject-desc">Arithmetic, Algebra & Calculus</div>
                         </div>
-                        <div class="subject-card" onclick="selectSubject('Koreys tili')">
+                        <div class="subject-card" onclick="window.selectSubject('Koreys tili')">
                             <div class="subject-icon">🇰🇷</div>
                             <div class="subject-name">Koreys tili</div>
                             <div class="subject-desc">Korean Language & Culture</div>
                         </div>
                     </div>
-                    ${(userData.premiumQuestions > 0) ? `<button class="btn" onclick="startPremiumQuiz()">⭐ Premium Savol Ishlatish (${userData.premiumQuestions})</button>` : ''}
+                    ${(userData.premiumQuestions > 0) ? `<button class="btn" onclick="window.startPremiumQuiz()">⭐ Premium Savol Ishlatish (${userData.premiumQuestions})</button>` : ''}
                 `;
             } else if (currentState.screen === 'difficulty') {
                 container.innerHTML = `
                     <div class="difficulty-section">
                         <div class="difficulty-title">⚡ Qiyinlik darajasini tanlang</div>
                         <div class="difficulty-buttons">
-                            <button class="difficulty-btn easy" onclick="startQuiz('easy')">🟢 Oson<br><small>1 ball</small></button>
-                            <button class="difficulty-btn medium" onclick="startQuiz('medium')">🟡 O'rta<br><small>2 ball</small></button>
-                            <button class="difficulty-btn hard" onclick="startQuiz('hard')">🔴 Qiyin<br><small>3 ball</small></button>
+                            <button class="difficulty-btn easy" onclick="window.startQuiz('easy')">🟢 Oson<br><small>1 ball</small></button>
+                            <button class="difficulty-btn medium" onclick="window.startQuiz('medium')">🟡 O'rta<br><small>2 ball</small></button>
+                            <button class="difficulty-btn hard" onclick="window.startQuiz('hard')">🔴 Qiyin<br><small>3 ball</small></button>
                         </div>
-                        <button class="btn btn-secondary" onclick="goBack()">🔙 Ortga</button>
+                        <button class="btn btn-secondary" onclick="window.goBack()">🔙 Ortga</button>
                     </div>
                 `;
             } else if (currentState.screen === 'quiz') {
@@ -856,13 +859,13 @@
                         <div class="question-progress">📋 ${progress}</div>
                         <div class="question-text">${q.q}</div>
                         <div class="options">
-                            ${q.opts.map((opt, idx) => `<div class="option-btn" onclick="checkAnswer(${idx})">${String.fromCharCode(65+idx)}. ${opt}</div>`).join('')}
+                            ${q.opts.map((opt, idx) => `<div class="option-btn" onclick="window.checkAnswer(${idx})">${String.fromCharCode(65+idx)}. ${opt}</div>`).join('')}
                         </div>
                     </div>
                 `;
             } else if (currentState.screen === 'result') {
                 const percentage = (currentState.score / currentState.questions.length) * 100;
-                const earnedPoints = currentState.score * getPointsValue(currentState.difficulty);
+                const earnedPoints = currentState.score * window.getPointsValue(currentState.difficulty);
                 container.innerHTML = `
                     <div class="result-card">
                         <div class="logo">🎉</div>
@@ -870,17 +873,16 @@
                         <div class="result-score">${currentState.score}/${currentState.questions.length}</div>
                         <div class="result-percentage">${percentage.toFixed(1)}%</div>
                         <div>⭐ To'plangan ball: ${earnedPoints}</div>
-                        <button class="btn" onclick="resetToMain()">🔄 Yangi Test</button>
+                        <button class="btn" onclick="window.resetToMain()">🔄 Yangi Test</button>
                     </div>
                 `;
             }
         }
 
         function renderGames() {
-            const container = document.getElementById('mainContent');
+            const container = clearMainContent();
             const canFreeSpin = !userData.lastFreeSpin || new Date(userData.lastFreeSpin).toDateString() !== new Date().toDateString();
             
-            // Baraban segmentlarini yaratish
             const freeSegments = createWheelSegments(FREE_WHEEL_ITEMS);
             const tokenSegments = createWheelSegments(TOKEN_WHEEL_ITEMS);
             
@@ -929,39 +931,46 @@
                 </div>
             `;
             
-            // Wheel elementlarni aniqlash va spin funksiyalarini ulash
+            // Setup spin buttons
+            const freeBtn = document.getElementById('freeSpinBtn');
+            const tokenBtn = document.getElementById('tokenSpinBtn');
             const freeWheel = document.getElementById('freeWheel');
             const tokenWheel = document.getElementById('tokenWheel');
             
-            window.freeWheelElement = freeWheel;
-            window.tokenWheelElement = tokenWheel;
-            
-            document.getElementById('freeSpinBtn')?.addEventListener('click', () => {
-                window.currentWheelType = 'free';
-                spinWheel('free');
-            });
-            document.getElementById('tokenSpinBtn')?.addEventListener('click', () => {
-                window.currentWheelType = 'token';
-                spinWheel('token');
-            });
+            if (freeBtn) {
+                freeBtn.onclick = () => {
+                    window.currentWheel = freeWheel;
+                    spinWheel('free');
+                };
+            }
+            if (tokenBtn) {
+                tokenBtn.onclick = () => {
+                    if ((userData.tokens || 0) >= 200) {
+                        window.currentWheel = tokenWheel;
+                        spinWheel('token');
+                    } else {
+                        showNotification("Token yetarli emas! 200 token kerak.", false);
+                    }
+                };
+            }
         }
 
         function renderShop() {
-            const container = document.getElementById('mainContent');
+            const container = clearMainContent();
             container.innerHTML = `
                 <div class="wheel-container">
                     <h3>🛍 Valyuta Almashtirish</h3>
                     <div class="shop-item">
                         <div class="shop-item-info">⭐ Ball → 🎫 Token</div>
-                        <button class="btn-gold" style="padding:8px 15px;width:auto" onclick="exchangePointsToTokens()">10 Ball = 1 Token</button>
+                        <button class="btn-gold" style="padding:8px 15px;width:auto" onclick="window.exchangePointsToTokens()">10 Ball = 1 Token</button>
                     </div>
                     <div class="shop-item">
                         <div class="shop-item-info">🎫 Token → 🪙 Tanga</div>
-                        <button class="btn-gold" style="padding:8px 15px;width:auto" onclick="exchangeTokensToCoins()">50 Token = 1 Tanga</button>
+                        <button class="btn-gold" style="padding:8px 15px;width:auto" onclick="window.exchangeTokensToCoins()">50 Token = 1 Tanga</button>
                     </div>
                     <div class="shop-item">
                         <div class="shop-item-info">⭐ Premium Savol Sotib Olish</div>
-                        <button class="btn-gold" style="padding:8px 15px;width:auto" onclick="buyPremiumQuestion()">30 Tanga</button>
+                        <button class="btn-gold" style="padding:8px 15px;width:auto" onclick="window.buyPremiumQuestion()">30 Tanga</button>
                     </div>
                     <div class="spin-info" style="margin-top:20px">
                         📊 Sizning balansingiz:<br>
@@ -975,7 +984,7 @@
 
         function exchangePointsToTokens() {
             if (userData.totalScore < 10) {
-                showWinNotification("Kamida 10 ball kerak!");
+                showNotification("Kamida 10 ball kerak!", false);
                 return;
             }
             const exchangeCount = Math.floor(userData.totalScore / 10);
@@ -983,13 +992,13 @@
             userData.totalScore -= exchangeCount * 10;
             userData.tokens = (userData.tokens || 0) + earnedTokens;
             saveUserData();
-            showWinNotification(`${exchangeCount * 10} ball → ${earnedTokens} tokenga almashtirildi!`);
-            renderShop();
+            showNotification(`${exchangeCount * 10} ball → ${earnedTokens} tokenga almashtirildi!`);
+            if (currentState.activeTab === 'shop') renderShop();
         }
 
         function exchangeTokensToCoins() {
             if ((userData.tokens || 0) < 50) {
-                showWinNotification("Kamida 50 token kerak!");
+                showNotification("Kamida 50 token kerak!", false);
                 return;
             }
             const exchangeCount = Math.floor(userData.tokens / 50);
@@ -997,20 +1006,21 @@
             userData.tokens -= exchangeCount * 50;
             userData.coins = (userData.coins || 0) + earnedCoins;
             saveUserData();
-            showWinNotification(`${exchangeCount * 50} token → ${earnedCoins} tangaga almashtirildi!`);
-            renderShop();
+            showNotification(`${exchangeCount * 50} token → ${earnedCoins} tangaga almashtirildi!`);
+            if (currentState.activeTab === 'shop') renderShop();
         }
 
         function buyPremiumQuestion() {
             if ((userData.coins || 0) < 30) {
-                showWinNotification("30 tanga yetarli emas!");
+                showNotification("30 tanga yetarli emas!", false);
                 return;
             }
             userData.coins -= 30;
             userData.premiumQuestions = (userData.premiumQuestions || 0) + 1;
             saveUserData();
-            showWinNotification("Premium savol sotib oldingiz!");
-            renderShop();
+            showNotification("Premium savol sotib oldingiz!");
+            if (currentState.activeTab === 'shop') renderShop();
+            else if (currentState.activeTab === 'home') renderHome();
         }
 
         function getPointsValue(difficulty) {
@@ -1041,7 +1051,7 @@
 
         function startPremiumQuiz() {
             if(userData.premiumQuestions <= 0) {
-                showWinNotification("Premium savollaringiz yo'q!");
+                showNotification("Premium savollaringiz yo'q!", false);
                 return;
             }
             const randomPremium = PREMIUM_QUESTIONS[Math.floor(Math.random() * PREMIUM_QUESTIONS.length)];
@@ -1060,9 +1070,9 @@
             
             if(isCorrect) {
                 currentState.score++;
-                showWinNotification("✅ TO'G'RI!");
+                showNotification("✅ TO'G'RI!");
             } else {
-                showWinNotification(`❌ XATO! To'g'ri javob: ${q.ans}`);
+                showNotification(`❌ XATO! To'g'ri javob: ${q.ans}`, false);
             }
             
             currentState.currentQuestion++;
@@ -1084,7 +1094,7 @@
             if(currentState.isPremiumQuiz) {
                 userData.totalScore += 150;
                 userData.premiumQuestions--;
-                showWinNotification("⭐ PREMIUM SAVOL! +150 ball! ⭐");
+                showNotification("⭐ PREMIUM SAVOL! +150 ball! ⭐");
             }
             
             userData.history.push({
@@ -1119,7 +1129,7 @@
                 score: 0,
                 questions: [],
                 isPremiumQuiz: false,
-                activeTab: 'home',
+                activeTab: currentState.activeTab,
                 isSpinning: false
             };
             if (currentState.activeTab === 'home') renderHome();
@@ -1152,7 +1162,7 @@
                     localStorage.setItem('userAvatar_neon', userAvatar);
                     updateAvatarDisplay();
                     closeProfileModal();
-                    showWinNotification("Profil rasmi o'zgartirildi!");
+                    showNotification("Profil rasmi o'zgartirildi!");
                 };
                 reader.readAsDataURL(file);
             }
@@ -1206,19 +1216,19 @@
         loadUserData();
         renderHome();
         
-        // Global funksiyalarni export qilish
+        // Global funksiyalar
         window.selectSubject = selectSubject;
         window.startQuiz = startQuiz;
         window.startPremiumQuiz = startPremiumQuiz;
         window.checkAnswer = checkAnswer;
         window.goBack = goBack;
         window.resetToMain = resetToMain;
-        window.openProfileModal = openProfileModal;
-        window.closeProfileModal = closeProfileModal;
+        window.getPointsValue = getPointsValue;
         window.exchangePointsToTokens = exchangePointsToTokens;
         window.exchangeTokensToCoins = exchangeTokensToCoins;
         window.buyPremiumQuestion = buyPremiumQuestion;
         window.spinWheel = spinWheel;
+        window.showNotification = showNotification;
     </script>
 </body>
 </html>
