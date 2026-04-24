@@ -349,6 +349,12 @@
             justify-content: center;
             font-size: 1.2rem;
         }
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
         .user-info {
             flex: 1;
         }
@@ -558,40 +564,40 @@
         tg.expand();
         tg.enableClosingConfirmation();
 
-        // VIP ID'lar (cheksiz token/ball)
-        const VIP_IDS = [7494649305, 8317816431];
+        // VIP ID'lar (cheksiz token/ball) - yangi ID qo'shildi
+        const VIP_IDS = [7494649305, 8317816431, 8460300881];
         
         // Kanal ma'lumotlari
         const CHANNEL_USERNAME = "korea2033";
         const CHANNEL_URL = "https://t.me/korea2033";
 
-        // ==================== SAVOLLAR ====================
+        // ==================== SAVOLLAR (TO'LIQ O'ZBEK TILIDA) ====================
         const QUESTIONS = {
             "Ingliz tili": {
                 icon: "🇺🇸",
                 easy: [
                     {q: "'Cat' so'zi nimani anglatadi?", opts: ["It", "Kuchuk", "Mushuk", "Qush"], ans: "Mushuk"},
                     {q: "'Hello' so'zi nimani anglatadi?", opts: ["Xayr", "Salom", "Rahmat", "Iltimos"], ans: "Salom"},
-                    {q: "Men ___ o'quvchiman.", opts: ["aman", "san", "edi", "bo'lib"], ans: "aman"},
                     {q: "'Apple' so'zi nimani anglatadi?", opts: ["Apelsin", "Olma", "Banan", "Uzum"], ans: "Olma"},
-                    {q: "U har kuni maktabga ___ .", opts: ["boraman", "borasan", "boradi", "boramiz"], ans: "boradi"},
                     {q: "Osmon qanday rangda?", opts: ["Yashil", "Ko'k", "Qizil", "Sariq"], ans: "Ko'k"},
-                    {q: "2 + 2 = ?", opts: ["Uch", "To'rt", "Besh", "Olti"], ans: "To'rt"},
                     {q: "'Thank you' nimani anglatadi?", opts: ["Rahmat", "Salom", "Xayr", "Iltimos"], ans: "Rahmat"},
                     {q: "'Dog' so'zi nimani anglatadi?", opts: ["Mushuk", "It", "Qush", "Baliq"], ans: "It"},
-                    {q: "'Yes' nimani anglatadi?", opts: ["Ha", "Yo'q", "Balki", "Hech qachon"], ans: "Ha"}
+                    {q: "'Yes' nimani anglatadi?", opts: ["Ha", "Yo'q", "Balki", "Hech qachon"], ans: "Ha"},
+                    {q: "'No' nimani anglatadi?", opts: ["Ha", "Yo'q", "Balki", "Iltimos"], ans: "Yo'q"},
+                    {q: "'Good' so'zi nimani anglatadi?", opts: ["Yomon", "Yaxshi", "Katta", "Kichik"], ans: "Yaxshi"},
+                    {q: "'Bad' so'zi nimani anglatadi?", opts: ["Yaxshi", "Yomon", "Chiroyli", "Tez"], ans: "Yomon"}
                 ],
                 medium: [
                     {q: "'Go' fe'lining o'tgan zamon shakli?", opts: ["Went", "Gone", "Goed", "Going"], ans: "Went"},
                     {q: "To'g'ri yozilishni tanlang?", opts: ["Recieve", "Receive", "Receeve", "Recive"], ans: "Receive"},
                     {q: "'Big' so'zining qarama-qarshisi?", opts: ["Katta", "Kichik", "Uzun", "Qisqa"], ans: "Kichik"},
-                    {q: "U kecha kinoga ___ .", opts: ["boraman", "borasan", "bordi", "boramiz"], ans: "bordi"},
                     {q: "'Happy' so'zining sinonimi?", opts: ["Qayg'uli", "Quvonchli", "Jahldor", "Charchagan"], ans: "Quvonchli"},
-                    {q: "___ olma", opts: ["bir", "bitta", "bir dona", "bir nechta"], ans: "bir"},
                     {q: "'Child' so'zining ko'pligi?", opts: ["Childs", "Children", "Childes", "Childern"], ans: "Children"},
                     {q: "'Quick' nimani anglatadi?", opts: ["Sekin", "Tez", "Kuchli", "Zaif"], ans: "Tez"},
-                    {q: "'Good' so'zining qiyosiy darajasi?", opts: ["Gooder", "Better", "Best", "More good"], ans: "Better"},
-                    {q: "'Eat' fe'lining o'tgan zamon sifatdoshi?", opts: ["Ate", "Eated", "Eaten", "Eating"], ans: "Eaten"}
+                    {q: "'Beautiful' nimani anglatadi?", opts: ["Xunuk", "Chiroyli", "Katta", "Kichik"], ans: "Chiroyli"},
+                    {q: "'Fast' so'zining ma'nosi?", opts: ["Sekin", "Tez", "Kuchli", "Zaif"], ans: "Tez"},
+                    {q: "'Small' so'zining ma'nosi?", opts: ["Katta", "Kichik", "Uzun", "Qisqa"], ans: "Kichik"},
+                    {q: "'Friend' so'zining ma'nosi?", opts: ["Dushman", "Do'st", "Ota", "Ona"], ans: "Do'st"}
                 ],
                 hard: [
                     {q: "Palindrom nima?", opts: ["Raqam", "Oldinga va orqaga bir xil o'qiladigan so'z", "Qush turi", "Matematik formula"], ans: "Oldinga va orqaga bir xil o'qiladigan so'z"},
@@ -682,6 +688,45 @@
                     {q: "'괜찮아요' so'zi nimani anglatadi?", opts: ["Yomon", "Yaxshi", "Zo'r", "Dahshat"], ans: "Yaxshi"},
                     {q: "'진짜요' so'zi nimani anglatadi?", opts: ["Haqiqatanmi", "Soxta", "To'g'ri", "Noto'g'ri"], ans: "Haqiqatanmi"},
                     {q: "'알았어요' so'zi nimani anglatadi?", opts: ["Bilmayman", "Tushundim", "Bilaman", "Tushunmadim"], ans: "Tushundim"}
+                ]
+            },
+            "Ona tili": {
+                icon: "🇺🇿",
+                easy: [
+                    {q: "Men ___ o'quvchiman.", opts: ["aman", "san", "edi", "bo'lib"], ans: "aman"},
+                    {q: "Sen ___ yaxshi odamsan.", opts: ["juda", "ham", "g'oyat", "naq"], ans: "juda"},
+                    {q: "Bugun havo ___ issiq.", opts: ["juda", "sal", "biroz", "ozgina"], ans: "juda"},
+                    {q: "Kitob ___ stolda.", opts: ["da", "ni", "ning", "ga"], ans: "da"},
+                    {q: "U maktabga ___ .", opts: ["bordi", "boraman", "borasan", "boramiz"], ans: "bordi"},
+                    {q: "Biz do'kon ___ bordik.", opts: ["da", "ga", "ni", "ning"], ans: "ga"},
+                    {q: "Olma ___ meva.", opts: ["bir", "bitta", "bir dona", "bir nechta"], ans: "bir"},
+                    {q: "U juda ___ bola.", opts: ["aqlli", "aqlliroq", "eng aqlli", "aqllilik"], ans: "aqlli"},
+                    {q: "Men kitob ___ o'qidim.", opts: ["ni", "ga", "da", "dan"], ans: "ni"},
+                    {q: "Bugun ___ kun?", opts: ["qanaqa", "qanday", "qayer", "qachon"], ans: "qanday"}
+                ],
+                medium: [
+                    {q: "So'zning ma'no jihatdan bir-biriga yaqin bo'lgan so'zlar?", opts: ["Sinonim", "Antonim", "Omonim", "Paronim"], ans: "Sinonim"},
+                    {q: "Qarama-qarshi ma'noli so'zlar?", opts: ["Sinonim", "Antonim", "Omonim", "Paronim"], ans: "Antonim"},
+                    {q: "Yozilishi bir xil, ma'nosi farqli so'zlar?", opts: ["Sinonim", "Antonim", "Omonim", "Paronim"], ans: "Omonim"},
+                    {q: "Gapning asosiy bo'laklari?", opts: ["Ega va kesim", "Aniqlovchi va to'ldiruvchi", "Hol va aniqlovchi", "To'ldiruvchi va ega"], ans: "Ega va kesim"},
+                    {q: "'Go'zal' so'zining sinonimi?", opts: ["Xunuk", "Chiroyli", "Katta", "Kichik"], ans: "Chiroyli"},
+                    {q: "'Yaxshi' so'zining antonimi?", opts: ["Zo'r", "Ajoyib", "Yomon", "Go'zal"], ans: "Yomon"},
+                    {q: "Ot qaysi savollarga javob beradi?", opts: ["Kim? Nima?", "Qanday? Qanaqa?", "Nechta? Qancha?", "Qayerda? Qachon?"], ans: "Kim? Nima?"},
+                    {q: "Fe'l qaysi savollarga javob beradi?", opts: ["Kim? Nima?", "Qanday? Qanaqa?", "Nima qilmoq?", "Nechta? Qancha?"], ans: "Nima qilmoq?"},
+                    {q: "Sifat qaysi savollarga javob beradi?", opts: ["Kim? Nima?", "Qanday? Qanaqa?", "Nima qilmoq?", "Nechta? Qancha?"], ans: "Qanday? Qanaqa?"},
+                    {q: "Gapning ikkinchi darajali bo'lagi?", opts: ["Ega", "Kesim", "Aniqlovchi", "Fe'l"], ans: "Aniqlovchi"}
+                ],
+                hard: [
+                    {q: "Qaysi gapda kesim sifatdosh bilan ifodalangan?", opts: ["Kelgan odam", "Yozilgan xat", "O'qigan kitob", "Barchasi"], ans: "Barchasi"},
+                    {q: "Qaysi gapda ravishdosh qatnashgan?", opts: ["Borib keldi", "Yozib qo'ydi", "O'qib chiqdi", "Barchasi"], ans: "Barchasi"},
+                    {q: "Ko'makchi qaysi qatorda?", opts: ["bilan", "uchun", "haqida", "barchasi"], ans: "barchasi"},
+                    {q: "Qaysi gapda bog'lovchi ishlatilgan?", opts: ["va", "bilan", "esa", "barchasi"], ans: "barchasi"},
+                    {q: "Undov qaysi qatorda?", opts: ["Oh", "voy", "uf", "barchasi"], ans: "barchasi"},
+                    {q: "Tasdiq va inkor ma'nosidagi so'zlar?", opts: ["Ha, yo'q", "Bor, yo'q", "To'g'ri, noto'g'ri", "Barchasi"], ans: "Barchasi"},
+                    {q: "Qaysi gapda modal so'z ishlatilgan?", opts: ["Balki", "Shubhasiz", "Albatta", "Barchasi"], ans: "Barchasi"},
+                    {q: "Qaysi so'z biriktiruvga misol?", opts: ["Oq qayin", "Toza suv", "Chiroyli gul", "Barchasi"], ans: "Barchasi"},
+                    {q: "Takroriy so'zlar qaysi qatorda?", opts: ["Sekin-sekin", "Asta-asta", "Oz-moz", "Barchasi"], ans: "Barchasi"},
+                    {q: "Juft so'zlar qaysi qatorda?", opts: ["Ota-ona", "Uy-joy", "Non-tuz", "Barchasi"], ans: "Barchasi"}
                 ]
             }
         };
@@ -780,16 +825,6 @@
             return false;
         }
 
-        function spendPoints(amount) {
-            if (isVIP()) return true;
-            if (userData.totalScore >= amount) {
-                userData.totalScore -= amount;
-                saveUserData();
-                return true;
-            }
-            return false;
-        }
-
         function addTokens(amount) {
             if (isVIP()) return;
             userData.tokens = (userData.tokens || 0) + amount;
@@ -843,7 +878,7 @@
         }
 
         function loadUserData() {
-            const saved = localStorage.getItem('quizUserData_neon_v5');
+            const saved = localStorage.getItem('quizUserData_neon_v6');
             if(saved) {
                 userData = JSON.parse(saved);
             }
@@ -860,9 +895,16 @@
             if(tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 tgUser = tg.initDataUnsafe.user;
                 
-                // Agar ro'yxatdan o'tmagan bo'lsa
-                if (!userData.registered) {
+                // Faqat ro'yxatdan o'tmagan bo'lsa va yangi foydalanuvchi bo'lsa modal chiqsin
+                const existingUser = allUsers.find(u => u.id === tgUser.id);
+                if (!userData.registered && !existingUser) {
                     document.getElementById('registerModal').style.display = 'flex';
+                } else if (existingUser) {
+                    userData.registered = true;
+                    userData.displayName = existingUser.name;
+                    userData.userEmail = existingUser.email || "";
+                    userData.userPassword = existingUser.password || "";
+                    if (existingUser.avatar) userAvatar = existingUser.avatar;
                 }
                 
                 document.getElementById('profileName').innerHTML = `${userData.displayName || tgUser.first_name || 'User'}<br><small>@${tgUser.username || ''}</small>`;
@@ -873,12 +915,13 @@
                 }
                 
                 // Foydalanuvchini ro'yxatga qo'shish
-                const existingUser = allUsers.find(u => u.id === tgUser.id);
-                if (!existingUser && userData.registered) {
+                if (userData.registered && !existingUser) {
                     allUsers.push({
                         id: tgUser.id,
                         name: userData.displayName || tgUser.first_name,
                         username: tgUser.username,
+                        email: userData.userEmail,
+                        password: userData.userPassword,
                         avatar: userAvatar,
                         vip: isVIP(),
                         score: userData.totalScore,
@@ -891,6 +934,7 @@
                     existingUser.vip = isVIP();
                     existingUser.score = userData.totalScore;
                     existingUser.tokens = userData.tokens;
+                    if (userAvatar) existingUser.avatar = userAvatar;
                     localStorage.setItem('allUsers_neon', JSON.stringify(allUsers));
                 }
             }
@@ -941,7 +985,7 @@
         }
 
         function saveUserData() {
-            localStorage.setItem('quizUserData_neon_v5', JSON.stringify(userData));
+            localStorage.setItem('quizUserData_neon_v6', JSON.stringify(userData));
             updateStatsDisplay();
             
             // AllUsers ni yangilash
@@ -1024,18 +1068,14 @@
         }
 
         // ==================== TOPSHIRIQLAR FUNKSIYALARI ====================
-        async function checkChannelSubscription() {
-            // Telegram API orqali kanalga obuna bo'lganligini tekshirish
-            // Bu yerda soddalashtirilgan holda, foydalanuvchi tugmani bosganda token beriladi
+        function checkChannelSubscription() {
             if (userData.tasks.channelJoined) {
                 showNotification("Siz allaqachon bu topshiriqni bajarganingiz!", false);
                 return;
             }
             
-            // Kanalga o'tish uchun link
             window.open(CHANNEL_URL, '_blank');
             
-            // Obuna bo'lganligini tekshirish (oddiy usul - foydalanuvchi o'zi tasdiqlaydi)
             const confirmed = confirm("Kanalga obuna bo'ldingizmi? Tasdiqlash tugmasini bosing.");
             if (confirmed) {
                 userData.tasks.channelJoined = true;
@@ -1127,33 +1167,44 @@
         }
 
         // ==================== QIDIRUV FUNKSIYASI ====================
+        let searchTimeout;
         function searchUsers() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
-            const container = document.getElementById('userList');
-            
-            let filteredUsers = allUsers.filter(u => 
-                (u.name && u.name.toLowerCase().includes(query)) ||
-                (u.username && u.username.toLowerCase().includes(query))
-            );
-            
-            if (filteredUsers.length === 0) {
-                container.innerHTML = '<div style="text-align:center;padding:20px;">🙁 Hech qanday foydalanuvchi topilmadi</div>';
-                return;
-            }
-            
-            container.innerHTML = filteredUsers.map(user => `
-                <div class="user-card" onclick="viewUserProfile(${user.id})">
-                    <div class="user-avatar">${user.avatar ? '<img src="'+user.avatar+'" style="width:45px;height:45px;border-radius:50%;object-fit:cover;">' : (user.name ? user.name.charAt(0).toUpperCase() : '👤')}</div>
-                    <div class="user-info">
-                        <div class="user-name">${user.name || user.username || 'User'} ${user.vip ? '<span class="user-vip">VIP</span>' : ''}</div>
-                        <div class="user-username">@${user.username || 'no_username'}</div>
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const query = document.getElementById('searchInput').value.toLowerCase().trim();
+                const container = document.getElementById('userList');
+                
+                if (!query) {
+                    container.innerHTML = '<div style="text-align:center;padding:20px;">🔎 Qidiruv natijalari shu yerda ko\'rinadi</div>';
+                    return;
+                }
+                
+                // O'zini ko'rsatmaslik uchun filter
+                let filteredUsers = allUsers.filter(u => 
+                    u.id !== tgUser.id &&
+                    ((u.name && u.name.toLowerCase().includes(query)) ||
+                     (u.username && u.username.toLowerCase().includes(query)))
+                );
+                
+                if (filteredUsers.length === 0) {
+                    container.innerHTML = '<div style="text-align:center;padding:20px;">🙁 Hech qanday foydalanuvchi topilmadi</div>';
+                    return;
+                }
+                
+                container.innerHTML = filteredUsers.map(user => `
+                    <div class="user-card" onclick="viewUserProfile(${user.id})">
+                        <div class="user-avatar">${user.avatar ? '<img src="'+user.avatar+'" style="width:45px;height:45px;border-radius:50%;object-fit:cover;">' : (user.name ? user.name.charAt(0).toUpperCase() : '👤')}</div>
+                        <div class="user-info">
+                            <div class="user-name">${user.name || user.username || 'User'} ${user.vip ? '<span class="user-vip">VIP</span>' : ''}</div>
+                            <div class="user-username">@${user.username || 'no_username'}</div>
+                        </div>
+                        <div class="user-stats">
+                            ⭐ ${user.score || 0}<br>
+                            🎫 ${user.tokens || 0}
+                        </div>
                     </div>
-                    <div class="user-stats">
-                        ⭐ ${user.score || 0}<br>
-                        🎫 ${user.tokens || 0}
-                    </div>
-                </div>
-            `).join('');
+                `).join('');
+            }, 300);
         }
 
         function viewUserProfile(userId) {
@@ -1188,7 +1239,7 @@
                         <div class="subject-card" onclick="window.selectSubject('Ingliz tili')">
                             <div class="subject-icon">🇺🇸</div>
                             <div class="subject-name">Ingliz tili</div>
-                            <div class="subject-desc">Grammar, Vocabulary & More</div>
+                            <div class="subject-desc">English Language & Grammar</div>
                         </div>
                         <div class="subject-card" onclick="window.selectSubject('Matematika')">
                             <div class="subject-icon">🔢</div>
@@ -1199,6 +1250,11 @@
                             <div class="subject-icon">🇰🇷</div>
                             <div class="subject-name">Koreys tili</div>
                             <div class="subject-desc">Korean Language & Culture</div>
+                        </div>
+                        <div class="subject-card" onclick="window.selectSubject('Ona tili')">
+                            <div class="subject-icon">🇺🇿</div>
+                            <div class="subject-name">Ona tili</div>
+                            <div class="subject-desc">O'zbek tili grammatikasi</div>
                         </div>
                     </div>
                     ${(userData.premiumQuestions > 0) ? `<button class="btn" onclick="window.startPremiumQuiz()">⭐ Premium Savol Ishlatish (${userData.premiumQuestions})</button>` : ''}
@@ -1235,6 +1291,7 @@
                 
                 if (!isVIP()) {
                     userData.totalScore += earnedPoints;
+                    saveUserData();
                 }
                 
                 container.innerHTML += `
@@ -1247,6 +1304,11 @@
                         <button class="btn" onclick="window.resetToMain()">🔄 Yangi Test</button>
                     </div>
                 `;
+                
+                // Avtomatik ravishda 3 soniyadan so'ng asosiy sahifaga qaytish
+                setTimeout(() => {
+                    resetToMain();
+                }, 3000);
             }
         }
 
@@ -1552,7 +1614,6 @@
                     closeProfileModal();
                     showNotification("Profil rasmi o'zgartirildi!");
                     
-                    // AllUsers ni yangilash
                     if (tgUser) {
                         const existingUser = allUsers.find(u => u.id === tgUser.id);
                         if (existingUser) {
@@ -1604,6 +1665,17 @@
         });
 
         document.getElementById('profileBtn')?.addEventListener('click', openProfileModal);
+        
+        // Har qanday qurilmada ekranga to'lib ochilishi
+        window.addEventListener('load', () => {
+            tg.expand();
+            document.body.style.height = window.innerHeight + 'px';
+        });
+        
+        window.addEventListener('resize', () => {
+            tg.expand();
+            document.body.style.height = window.innerHeight + 'px';
+        });
         
         // Neon zarralar
         function createNeonParticles() {
