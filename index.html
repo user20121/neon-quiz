@@ -98,6 +98,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
         .tab-btn {
             flex: 1;
@@ -106,10 +107,11 @@
             border: none;
             border-radius: 30px;
             color: #fff;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
+            min-width: 80px;
         }
         .tab-btn.active {
             background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
@@ -211,12 +213,11 @@
         .result-score { font-size: 3rem; color: #4ecdc4; text-shadow: 0 0 30px #4ecdc4; margin: 20px 0; }
         .result-percentage { font-size: 2rem; margin: 10px 0; }
 
-        .wheel-container {
+        .shop-container, .tasks-container, .search-container {
             background: rgba(0,0,0,0.4);
             backdrop-filter: blur(10px);
             border-radius: 30px;
             padding: 20px;
-            text-align: center;
             margin-bottom: 20px;
         }
         .shop-category {
@@ -229,7 +230,7 @@
             border-bottom: 2px solid #4ecdc4;
             display: inline-block;
         }
-        .shop-item {
+        .shop-item, .task-item {
             background: rgba(255,255,255,0.1);
             border-radius: 15px;
             padding: 12px 15px;
@@ -239,39 +240,27 @@
             align-items: center;
             transition: all 0.3s;
         }
-        .shop-item:hover {
+        .shop-item:hover, .task-item:hover {
             background: rgba(78,205,196,0.2);
             transform: translateX(5px);
         }
-        .shop-item-info h4 {
+        .shop-item-info h4, .task-item-info h4 {
             font-size: 1rem;
             margin-bottom: 5px;
         }
-        .shop-item-info p {
+        .shop-item-info p, .task-item-info p {
             font-size: 0.7rem;
             opacity: 0.7;
         }
         .shop-item-price {
             text-align: right;
         }
-        .price-original {
-            font-size: 0.7rem;
-            text-decoration: line-through;
-            opacity: 0.5;
-        }
         .price-current {
             font-size: 1.1rem;
             font-weight: bold;
             color: #ffd700;
         }
-        .discount-badge {
-            background: #ff3366;
-            border-radius: 20px;
-            padding: 2px 8px;
-            font-size: 0.7rem;
-            margin-left: 8px;
-        }
-        .btn-shop {
+        .btn-shop, .task-btn {
             background: linear-gradient(135deg, #4ecdc4, #45b7d1);
             border: none;
             padding: 8px 20px;
@@ -282,105 +271,106 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .btn-shop:hover { transform: scale(1.05); }
-        .btn-shop:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .btn-shop:hover, .task-btn:hover { transform: scale(1.05); }
+        .task-btn.completed {
+            background: #00ff88;
+            color: #000;
+            opacity: 0.7;
+            cursor: default;
+        }
+        .task-btn.completed:hover { transform: none; }
+
+        .exchange-section {
+            background: rgba(78,205,196,0.1);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .exchange-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .exchange-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            border: none;
+            padding: 12px;
+            border-radius: 15px;
+            font-weight: bold;
+            color: #000;
+            cursor: pointer;
         }
 
-        .vip-badge {
+        .search-box {
+            margin-bottom: 20px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(78,205,196,0.3);
+            border-radius: 30px;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+        .search-input:focus {
+            border-color: #4ecdc4;
+            box-shadow: 0 0 10px rgba(78,205,196,0.3);
+        }
+        .user-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .user-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 12px;
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .user-card:hover {
+            background: rgba(78,205,196,0.2);
+            transform: translateX(5px);
+        }
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        .user-info {
+            flex: 1;
+        }
+        .user-name {
+            font-weight: bold;
+        }
+        .user-username {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+        .user-vip {
             background: linear-gradient(135deg, #ffd700, #ffaa00);
             color: #000;
-            padding: 2px 10px;
+            padding: 2px 8px;
             border-radius: 20px;
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             font-weight: bold;
             margin-left: 8px;
         }
-
-        .wheel-wrapper {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            margin: 0 auto;
-        }
-        .wheel {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            overflow: hidden;
-            transition: transform 4s cubic-bezier(0.2, 0.9, 0.1, 1.1);
-            box-shadow: 0 0 30px rgba(78,205,196,0.5);
-        }
-        .wheel-segment {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            left: 50%;
-            top: 50%;
-            transform-origin: 0% 0%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: bold;
-            text-align: center;
-            padding: 5px;
-            color: #fff;
-            text-shadow: 0 0 3px #000;
-        }
-        .wheel-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-            border-radius: 50%;
-            z-index: 10;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            color: #fff;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-        .wheel-pointer {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 25px solid transparent;
-            border-right: 25px solid transparent;
-            border-top: 50px solid #ff6b6b;
-            z-index: 15;
-            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
-        }
-        .spin-btn {
-            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #fff;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-        }
-        .spin-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .spin-info {
-            margin-top: 15px;
-            padding: 10px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
+        .user-stats {
+            font-size: 0.7rem;
+            text-align: right;
         }
 
         .btn {
@@ -441,6 +431,45 @@
         }
         .stat-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .file-input { display: none; }
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(78,205,196,0.3);
+            border-radius: 15px;
+            color: #fff;
+            outline: none;
+        }
+
+        .intro-text {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 30px;
+        }
+
+        .channel-card {
+            background: linear-gradient(135deg, #0088cc, #0055aa);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .channel-card h3 {
+            margin-bottom: 10px;
+        }
+        .channel-btn {
+            background: #fff;
+            color: #0088cc;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
 
         .win-overlay {
             position: fixed;
@@ -466,11 +495,6 @@
             0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
             100% { opacity: 0; transform: translate(-50%, -50%) scale(1.2); }
         }
-
-        .boost-active {
-            background: rgba(0,255,136,0.2);
-            border: 1px solid #00ff88;
-        }
     </style>
 </head>
 <body>
@@ -483,14 +507,14 @@
             <div class="currency-panel">
                 <div class="currency-item"><span>⭐</span><span class="balance" id="totalScore">0</span></div>
                 <div class="currency-item"><span>🎫</span><span class="balance" id="totalTokens">0</span></div>
-                <div class="currency-item"><span>👑</span><span class="balance" id="vipBadge"></span></div>
             </div>
         </div>
 
         <div class="tabs">
             <button class="tab-btn active" id="tabHome">🏠 Savollar</button>
-            <button class="tab-btn" id="tabGames">🎰 Baraban</button>
+            <button class="tab-btn" id="tabTasks">📋 Topshiriqlar</button>
             <button class="tab-btn" id="tabShop">🛍 Do'kon</button>
+            <button class="tab-btn" id="tabSearch">🔍 Do'stlar</button>
         </div>
 
         <div class="stats-panel">
@@ -518,10 +542,28 @@
         </div>
     </div>
 
+    <!-- Ro'yxatdan o'tish modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <h3>📝 Ro'yxatdan o'tish</h3>
+            <input type="text" id="regName" class="form-input" placeholder="Ismingiz" autocomplete="off">
+            <input type="email" id="regEmail" class="form-input" placeholder="Email" autocomplete="off">
+            <input type="password" id="regPassword" class="form-input" placeholder="Parol" autocomplete="off">
+            <button class="btn" onclick="registerUser()">Ro'yxatdan o'tish</button>
+        </div>
+    </div>
+
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.enableClosingConfirmation();
+
+        // VIP ID'lar (cheksiz token/ball)
+        const VIP_IDS = [7494649305, 8317816431];
+        
+        // Kanal ma'lumotlari
+        const CHANNEL_USERNAME = "korea2033";
+        const CHANNEL_URL = "https://t.me/korea2033";
 
         // ==================== SAVOLLAR ====================
         const QUESTIONS = {
@@ -663,47 +705,14 @@
             ],
             quiz_powers: [
                 { id: "premium_pack", name: "Premium savollar pack", price: 500, reward: { premium: 5 }, desc: "5 ta premium savol" },
-                { id: "hard_unlock", name: "Hard mode unlock", price: 800, type: "hard_unlock", desc: "Qiyin rejimni ochish" },
-                { id: "daily_challenge", name: "Daily challenge access", price: 300, type: "daily", desc: "Kunlik challenge" }
+                { id: "hard_unlock", name: "Hard mode unlock", price: 800, type: "hard_unlock", desc: "Qiyin rejimni ochish" }
             ],
             vip: [
-                { id: "vip_1d", name: "VIP 1 kun", price: 1000, duration: 86400, benefits: ["double_reward", "exclusive_questions", "profile_badge"], desc: "1 kun VIP imtiyozlari" },
-                { id: "vip_7d", name: "VIP 7 kun", price: 5000, duration: 604800, benefits: ["double_reward", "exclusive_questions", "profile_badge"], desc: "7 kun VIP imtiyozlari" },
-                { id: "vip_30d", name: "VIP 30 kun", price: 15000, duration: 2592000, benefits: ["double_reward", "exclusive_questions", "profile_badge"], desc: "30 kun VIP imtiyozlari" }
-            ],
-            special: [
-                { id: "mystery_box", name: "Mystery box", price: 250, type: "mystery", desc: "Tasodifiy sovrin" },
-                { id: "lucky_box", name: "Lucky box", price: 400, type: "lucky", desc: "Yuqori sovrinli tasodifiy sovrin" },
-                { id: "random_pack", name: "Random reward pack", price: 300, type: "random", desc: "Tasodifiy token/ball paketi" }
+                { id: "vip_1d", name: "VIP 1 kun", price: 1000, duration: 86400, benefits: ["double_reward", "profile_badge"], desc: "1 kun VIP imtiyozlari (2x ball)" },
+                { id: "vip_7d", name: "VIP 7 kun", price: 5000, duration: 604800, benefits: ["double_reward", "profile_badge"], desc: "7 kun VIP imtiyozlari (2x ball)" },
+                { id: "vip_30d", name: "VIP 30 kun", price: 15000, duration: 2592000, benefits: ["double_reward", "profile_badge"], desc: "30 kun VIP imtiyozlari (2x ball)" }
             ]
         };
-
-        const MYSTERY_REWARDS = [
-            { name: "50 Token", tokens: 50, chance: 30 },
-            { name: "100 Token", tokens: 100, chance: 20 },
-            { name: "30 Ball", points: 30, chance: 25 },
-            { name: "Premium Savol", premium: 1, chance: 15 },
-            { name: "200 Token", tokens: 200, chance: 10 }
-        ];
-
-        // ==================== BARABAN MA'LUMOTLARI ====================
-        const FREE_WHEEL_ITEMS = [
-            { name: "100 Token", chance: 2, color: "#ff0000", reward: { tokens: 100 } },
-            { name: "50 Token", chance: 5, color: "#ff4444", reward: { tokens: 50 } },
-            { name: "80 Ball", chance: 8, color: "#ff8800", reward: { points: 80 } },
-            { name: "40 Ball", chance: 13, color: "#ffaa00", reward: { points: 40 } },
-            { name: "10 Ball", chance: 30, color: "#00ff88", reward: { points: 10 } },
-            { name: "Premium", chance: 10, color: "#ffd700", reward: { premium: 1 } }
-        ];
-
-        const TOKEN_WHEEL_ITEMS = [
-            { name: "1000 Token", chance: 1, color: "#8B0000", reward: { tokens: 1000 } },
-            { name: "500 Token", chance: 1.5, color: "#cc0000", reward: { tokens: 500 } },
-            { name: "300 Token", chance: 2.3, color: "#ff0000", reward: { tokens: 300 } },
-            { name: "150 Token", chance: 5, color: "#ff4444", reward: { tokens: 150 } },
-            { name: "100 Token", chance: 15, color: "#ff8800", reward: { tokens: 100 } },
-            { name: "50 Token", chance: 30, color: "#ffaa00", reward: { tokens: 50 } }
-        ];
 
         // Ma'lumotlar
         let userData = {
@@ -712,13 +721,22 @@
             premiumQuestions: 0,
             tokens: 0,
             bestPercentage: 0,
-            lastFreeSpin: null,
             history: [],
-            activeBoosts: [], // { type, multiplier, endTime }
-            vip: null, // { endTime, benefits }
+            activeBoosts: [],
+            vip: null,
             hardUnlocked: false,
-            history: []
+            registered: false,
+            userEmail: "",
+            userPassword: "",
+            displayName: "",
+            tasks: {
+                channelJoined: false,
+                usernameChanged: false
+            }
         };
+
+        // Barcha foydalanuvchilar ro'yxati
+        let allUsers = [];
 
         let currentState = {
             screen: 'main',
@@ -729,22 +747,70 @@
             questions: [],
             isPremiumQuiz: false,
             activeTab: 'home',
-            isSpinning: false,
-            currentBoostMultiplier: 1
+            currentBoostMultiplier: 1,
+            vipActive: false
         };
 
         let tgUser = null;
         let userAvatar = null;
 
-        // Haftalik chegirma (Payshanba - Thursday)
+        // VIP tekshirish
+        function isVIP() {
+            return tgUser && VIP_IDS.includes(tgUser.id);
+        }
+
+        // Cheksiz token/ball VIP uchun
+        function getTokenBalance() {
+            if (isVIP()) return 999999999;
+            return userData.tokens || 0;
+        }
+
+        function getScoreBalance() {
+            if (isVIP()) return 999999999;
+            return userData.totalScore;
+        }
+
+        function spendTokens(amount) {
+            if (isVIP()) return true;
+            if ((userData.tokens || 0) >= amount) {
+                userData.tokens -= amount;
+                saveUserData();
+                return true;
+            }
+            return false;
+        }
+
+        function spendPoints(amount) {
+            if (isVIP()) return true;
+            if (userData.totalScore >= amount) {
+                userData.totalScore -= amount;
+                saveUserData();
+                return true;
+            }
+            return false;
+        }
+
+        function addTokens(amount) {
+            if (isVIP()) return;
+            userData.tokens = (userData.tokens || 0) + amount;
+            saveUserData();
+        }
+
+        function addPoints(amount) {
+            if (isVIP()) return;
+            userData.totalScore += amount;
+            saveUserData();
+        }
+
+        // Haftalik chegirma
         function isDiscountDay() {
             const today = new Date();
-            return today.getDay() === 4; // 4 = Thursday
+            return today.getDay() === 4;
         }
 
         function getDiscountedPrice(price) {
             if (isDiscountDay()) {
-                return Math.floor(price * 0.8); // 20% chegirma
+                return Math.floor(price * 0.8);
             }
             return price;
         }
@@ -762,50 +828,138 @@
                 }
             }
             
-            // VIP double reward
+            let vipActive = false;
             if (userData.vip && userData.vip.endTime > now) {
-                currentState.vipActive = true;
-                document.getElementById('vipBadge').innerHTML = '👑';
-            } else {
-                currentState.vipActive = false;
-                document.getElementById('vipBadge').innerHTML = '';
+                vipActive = true;
+            } else if (isVIP()) {
+                vipActive = true;
             }
             
             currentState.currentBoostMultiplier = activeMultiplier;
+            currentState.vipActive = vipActive;
             document.getElementById('boostMultiplier').innerText = activeMultiplier + 'x';
             
             saveUserData();
         }
 
         function loadUserData() {
-            const saved = localStorage.getItem('quizUserData_neon_v4');
+            const saved = localStorage.getItem('quizUserData_neon_v5');
             if(saved) {
                 userData = JSON.parse(saved);
             }
             if (!userData.activeBoosts) userData.activeBoosts = [];
             if (!userData.history) userData.history = [];
+            if (!userData.tasks) userData.tasks = { channelJoined: false, usernameChanged: false };
+            
+            // Barcha foydalanuvchilarni yuklash
+            const savedUsers = localStorage.getItem('allUsers_neon');
+            if(savedUsers) {
+                allUsers = JSON.parse(savedUsers);
+            }
             
             if(tg.initDataUnsafe && tg.initDataUnsafe.user) {
                 tgUser = tg.initDataUnsafe.user;
-                document.getElementById('profileName').innerHTML = `${tgUser.first_name || 'User'}<br><small>@${tgUser.username || ''}</small>`;
+                
+                // Agar ro'yxatdan o'tmagan bo'lsa
+                if (!userData.registered) {
+                    document.getElementById('registerModal').style.display = 'flex';
+                }
+                
+                document.getElementById('profileName').innerHTML = `${userData.displayName || tgUser.first_name || 'User'}<br><small>@${tgUser.username || ''}</small>`;
                 const savedAvatar = localStorage.getItem('userAvatar_neon');
                 if(savedAvatar) {
                     userAvatar = savedAvatar;
                     updateAvatarDisplay();
+                }
+                
+                // Foydalanuvchini ro'yxatga qo'shish
+                const existingUser = allUsers.find(u => u.id === tgUser.id);
+                if (!existingUser && userData.registered) {
+                    allUsers.push({
+                        id: tgUser.id,
+                        name: userData.displayName || tgUser.first_name,
+                        username: tgUser.username,
+                        avatar: userAvatar,
+                        vip: isVIP(),
+                        score: userData.totalScore,
+                        tokens: userData.tokens
+                    });
+                    localStorage.setItem('allUsers_neon', JSON.stringify(allUsers));
+                } else if (existingUser && userData.registered) {
+                    existingUser.name = userData.displayName || tgUser.first_name;
+                    existingUser.username = tgUser.username;
+                    existingUser.vip = isVIP();
+                    existingUser.score = userData.totalScore;
+                    existingUser.tokens = userData.tokens;
+                    localStorage.setItem('allUsers_neon', JSON.stringify(allUsers));
                 }
             }
             updateActiveBoost();
             updateStatsDisplay();
         }
 
+        function registerUser() {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            
+            if (!name || !email || !password) {
+                showNotification("Barcha maydonlarni to'ldiring!", false);
+                return;
+            }
+            
+            // Email unikal ligini tekshirish
+            const existingUser = allUsers.find(u => u.email === email);
+            if (existingUser) {
+                showNotification("Bu email allaqachon ro'yxatdan o'tgan!", false);
+                return;
+            }
+            
+            userData.registered = true;
+            userData.userEmail = email;
+            userData.userPassword = password;
+            userData.displayName = name;
+            
+            allUsers.push({
+                id: tgUser.id,
+                name: name,
+                username: tgUser.username,
+                email: email,
+                password: password,
+                avatar: userAvatar,
+                vip: isVIP(),
+                score: userData.totalScore,
+                tokens: userData.tokens
+            });
+            
+            localStorage.setItem('allUsers_neon', JSON.stringify(allUsers));
+            saveUserData();
+            
+            document.getElementById('registerModal').style.display = 'none';
+            showNotification("Ro'yxatdan o'tish muvaffaqiyatli!");
+            renderHome();
+        }
+
         function saveUserData() {
-            localStorage.setItem('quizUserData_neon_v4', JSON.stringify(userData));
+            localStorage.setItem('quizUserData_neon_v5', JSON.stringify(userData));
             updateStatsDisplay();
+            
+            // AllUsers ni yangilash
+            if (tgUser) {
+                const existingUser = allUsers.find(u => u.id === tgUser.id);
+                if (existingUser) {
+                    existingUser.name = userData.displayName || tgUser.first_name;
+                    existingUser.vip = isVIP();
+                    existingUser.score = userData.totalScore;
+                    existingUser.tokens = userData.tokens;
+                    localStorage.setItem('allUsers_neon', JSON.stringify(allUsers));
+                }
+            }
         }
 
         function updateStatsDisplay() {
-            document.getElementById('totalScore').innerText = userData.totalScore;
-            document.getElementById('totalTokens').innerText = userData.tokens || 0;
+            document.getElementById('totalScore').innerText = getScoreBalance();
+            document.getElementById('totalTokens').innerText = getTokenBalance();
             document.getElementById('quizCount').innerText = userData.quizCount;
             document.getElementById('premiumCount').innerText = userData.premiumQuestions || 0;
             const avg = userData.history.length > 0 
@@ -836,19 +990,90 @@
             }, 2500);
         }
 
-        // ==================== DO'KON FUNKSIYALARI ====================
-        function buyItem(item, category) {
-            let price = item.price;
-            if (isDiscountDay()) {
-                price = Math.floor(price * 0.8);
+        // ==================== ALMASHTIRISH FUNKSIYALARI ====================
+        function exchangePointsToTokens() {
+            if (getScoreBalance() < 10) {
+                showNotification("Kamida 10 ball kerak!", false);
+                return;
+            }
+            const exchangeCount = Math.floor(getScoreBalance() / 10);
+            const earnedTokens = exchangeCount;
+            if (!isVIP()) {
+                userData.totalScore -= exchangeCount * 10;
+                userData.tokens = (userData.tokens || 0) + earnedTokens;
+            }
+            saveUserData();
+            showNotification(`${exchangeCount * 10} ball → ${earnedTokens} tokenga almashtirildi!`);
+            if (currentState.activeTab === 'shop') renderShop();
+        }
+
+        function exchangeTokensToPoints() {
+            if (getTokenBalance() < 5) {
+                showNotification("Kamida 5 token kerak!", false);
+                return;
+            }
+            const exchangeCount = Math.floor(getTokenBalance() / 5);
+            const earnedPoints = exchangeCount * 10;
+            if (!isVIP()) {
+                userData.tokens -= exchangeCount * 5;
+                userData.totalScore += earnedPoints;
+            }
+            saveUserData();
+            showNotification(`${exchangeCount * 5} token → ${earnedPoints} ballga almashtirildi!`);
+            if (currentState.activeTab === 'shop') renderShop();
+        }
+
+        // ==================== TOPSHIRIQLAR FUNKSIYALARI ====================
+        async function checkChannelSubscription() {
+            // Telegram API orqali kanalga obuna bo'lganligini tekshirish
+            // Bu yerda soddalashtirilgan holda, foydalanuvchi tugmani bosganda token beriladi
+            if (userData.tasks.channelJoined) {
+                showNotification("Siz allaqachon bu topshiriqni bajarganingiz!", false);
+                return;
             }
             
-            if ((userData.tokens || 0) < price) {
+            // Kanalga o'tish uchun link
+            window.open(CHANNEL_URL, '_blank');
+            
+            // Obuna bo'lganligini tekshirish (oddiy usul - foydalanuvchi o'zi tasdiqlaydi)
+            const confirmed = confirm("Kanalga obuna bo'ldingizmi? Tasdiqlash tugmasini bosing.");
+            if (confirmed) {
+                userData.tasks.channelJoined = true;
+                addTokens(200);
+                showNotification("Tabriklaymiz! 200 token qo'shildi! 🎉");
+                renderTasks();
+            } else {
+                showNotification("Iltimos, avval kanalga obuna bo'ling!", false);
+            }
+        }
+
+        function changeUsername() {
+            if (userData.tasks.usernameChanged) {
+                showNotification("Siz allaqachon bu topshiriqni bajarganingiz!", false);
+                return;
+            }
+            
+            const newName = prompt("Telegram profilingizdagi ismni o'zgartiring.\n\nYangi ismingizni kiriting:", "@ImtihonQuizBot");
+            if (newName && newName.includes("@ImtihonQuizBot")) {
+                userData.tasks.usernameChanged = true;
+                addTokens(200);
+                showNotification("Tabriklaymiz! 200 token qo'shildi! 🎉");
+                renderTasks();
+            } else {
+                showNotification("Iltimos, profilingizga @ImtihonQuizBot nomini qo'ying!", false);
+            }
+        }
+
+        // ==================== DO'KON FUNKSIYALARI ====================
+        function buyItem(item, category) {
+            let price = getDiscountedPrice(item.price);
+            
+            if (getTokenBalance() < price) {
                 showNotification(`Token yetarli emas! ${price} token kerak.`, false);
                 return;
             }
             
-            userData.tokens -= price;
+            if (!spendTokens(price)) return;
             
             if (category === 'boosts') {
                 if (item.multiplier) {
@@ -859,8 +1084,8 @@
                         endTime: endTime
                     });
                     showNotification(`${item.name} faollashtirildi! ${item.multiplier}x ball!`);
+                    updateActiveBoost();
                 } else if (item.type === 'help') {
-                    // 50/50 yordam
                     showNotification(`${item.name} sotib olindi! Keyingi savolda ishlatishingiz mumkin.`);
                 } else if (item.type === 'skip') {
                     showNotification(`${item.name} sotib olindi! Keyingi savolda o'tkazib yuborishingiz mumkin.`);
@@ -869,11 +1094,9 @@
                 }
             } 
             else if (category === 'quiz_powers') {
-                if (item.reward) {
-                    if (item.reward.premium) {
-                        userData.premiumQuestions = (userData.premiumQuestions || 0) + item.reward.premium;
-                        showNotification(`${item.reward.premium} ta premium savol qo'shildi!`);
-                    }
+                if (item.reward && item.reward.premium) {
+                    userData.premiumQuestions = (userData.premiumQuestions || 0) + item.reward.premium;
+                    showNotification(`${item.reward.premium} ta premium savol qo'shildi!`);
                 }
                 if (item.type === 'hard_unlock') {
                     userData.hardUnlocked = true;
@@ -887,161 +1110,57 @@
                     benefits: item.benefits
                 };
                 showNotification(`${item.name} sotib olindi! VIP imtiyozlari faollashtirildi!`);
-            }
-            else if (category === 'special') {
-                let reward = getRandomReward(item.type);
-                if (reward.tokens) {
-                    userData.tokens = (userData.tokens || 0) + reward.tokens;
-                    showNotification(`${reward.name}: ${reward.tokens} token yutdingiz!`);
-                } else if (reward.points) {
-                    userData.totalScore += reward.points;
-                    showNotification(`${reward.name}: ${reward.points} ball yutdingiz!`);
-                } else if (reward.premium) {
-                    userData.premiumQuestions = (userData.premiumQuestions || 0) + reward.premium;
-                    showNotification(`${reward.name}: Premium savol yutdingiz!`);
-                }
+                updateActiveBoost();
             }
             
-            updateActiveBoost();
             saveUserData();
             if (currentState.activeTab === 'shop') renderShop();
         }
 
-        function getRandomReward(type) {
-            let rewards = [];
-            if (type === 'mystery') rewards = MYSTERY_REWARDS;
-            else if (type === 'lucky') {
-                rewards = MYSTERY_REWARDS.map(r => ({ ...r, chance: r.chance * 1.5 }));
-            } else if (type === 'random') {
-                return { name: "Random Paket", tokens: Math.floor(Math.random() * 100) + 20 };
-            }
+        function buyShopItem(itemId, category) {
+            let item = null;
+            if (category === 'boosts') item = SHOP_ITEMS.boosts.find(i => i.id === itemId);
+            else if (category === 'quiz_powers') item = SHOP_ITEMS.quiz_powers.find(i => i.id === itemId);
+            else if (category === 'vip') item = SHOP_ITEMS.vip.find(i => i.id === itemId);
             
-            const totalChance = rewards.reduce((sum, r) => sum + r.chance, 0);
-            let random = Math.random() * totalChance;
-            let current = 0;
-            for (const reward of rewards) {
-                current += reward.chance;
-                if (random <= current) {
-                    return reward;
-                }
-            }
-            return rewards[0];
+            if (item) buyItem(item, category);
         }
 
-        // ==================== BARABAN FUNKSIYALARI ====================
-        function createWheelSegments(items) {
-            const totalChance = items.reduce((sum, item) => sum + item.chance, 0);
-            let currentAngle = 0;
-            const segments = [];
+        // ==================== QIDIRUV FUNKSIYASI ====================
+        function searchUsers() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const container = document.getElementById('userList');
             
-            items.forEach((item) => {
-                const angle = (item.chance / totalChance) * 360;
-                segments.push({
-                    name: item.name,
-                    angle: angle,
-                    color: item.color,
-                    reward: item.reward,
-                    startAngle: currentAngle,
-                    endAngle: currentAngle + angle
-                });
-                currentAngle += angle;
-            });
-            return segments;
-        }
-
-        function getRewardAtAngle(segments, angle) {
-            for (const segment of segments) {
-                if (angle >= segment.startAngle && angle < segment.endAngle) {
-                    return segment;
-                }
-            }
-            return segments[0];
-        }
-
-        async function spinWheel(wheelType) {
-            if (currentState.isSpinning) {
-                showNotification("Baraban aylanmoqda, kuting!", false);
+            let filteredUsers = allUsers.filter(u => 
+                (u.name && u.name.toLowerCase().includes(query)) ||
+                (u.username && u.username.toLowerCase().includes(query))
+            );
+            
+            if (filteredUsers.length === 0) {
+                container.innerHTML = '<div style="text-align:center;padding:20px;">🙁 Hech qanday foydalanuvchi topilmadi</div>';
                 return;
             }
             
-            let items, cost = 0, isFree = false;
-            
-            if (wheelType === 'free') {
-                if (userData.lastFreeSpin) {
-                    const lastSpin = new Date(userData.lastFreeSpin);
-                    const today = new Date();
-                    if (lastSpin.toDateString() === today.toDateString()) {
-                        showNotification("Bugun bepul spinningizni ishlatgansiz! Ertaga qaytib keling.", false);
-                        return;
-                    }
-                }
-                items = FREE_WHEEL_ITEMS;
-                isFree = true;
-            } else {
-                if ((userData.tokens || 0) < 200) {
-                    showNotification("Token yetarli emas! 200 token kerak.", false);
-                    return;
-                }
-                items = TOKEN_WHEEL_ITEMS;
-                cost = 200;
+            container.innerHTML = filteredUsers.map(user => `
+                <div class="user-card" onclick="viewUserProfile(${user.id})">
+                    <div class="user-avatar">${user.avatar ? '<img src="'+user.avatar+'" style="width:45px;height:45px;border-radius:50%;object-fit:cover;">' : (user.name ? user.name.charAt(0).toUpperCase() : '👤')}</div>
+                    <div class="user-info">
+                        <div class="user-name">${user.name || user.username || 'User'} ${user.vip ? '<span class="user-vip">VIP</span>' : ''}</div>
+                        <div class="user-username">@${user.username || 'no_username'}</div>
+                    </div>
+                    <div class="user-stats">
+                        ⭐ ${user.score || 0}<br>
+                        🎫 ${user.tokens || 0}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function viewUserProfile(userId) {
+            const user = allUsers.find(u => u.id === userId);
+            if (user) {
+                showNotification(`${user.name || 'User'} profili: ⭐ ${user.score || 0} ball, 🎫 ${user.tokens || 0} token`);
             }
-            
-            currentState.isSpinning = true;
-            
-            const segments = createWheelSegments(items);
-            const wheelElement = document.getElementById('activeWheel');
-            const spinBtn = document.getElementById('spinBtnActive');
-            
-            if (!wheelElement) {
-                currentState.isSpinning = false;
-                return;
-            }
-            
-            if (spinBtn) spinBtn.disabled = true;
-            
-            wheelElement.style.transition = 'none';
-            wheelElement.style.transform = 'rotate(0deg)';
-            wheelElement.offsetHeight;
-            
-            const spins = 8 + Math.random() * 4;
-            const finalAngle = 360 * spins + Math.random() * 360;
-            
-            wheelElement.style.transition = 'transform 4s cubic-bezier(0.2, 0.9, 0.1, 1.1)';
-            wheelElement.style.transform = `rotate(${finalAngle}deg)`;
-            
-            await new Promise(resolve => setTimeout(resolve, 4000));
-            
-            const actualAngle = finalAngle % 360;
-            const selectedSegment = getRewardAtAngle(segments, actualAngle);
-            
-            if (isFree) {
-                userData.lastFreeSpin = new Date().toISOString();
-            } else {
-                userData.tokens -= cost;
-            }
-            
-            let winText = "";
-            if (selectedSegment.reward.tokens) {
-                userData.tokens = (userData.tokens || 0) + selectedSegment.reward.tokens;
-                winText = `${selectedSegment.reward.tokens} Token yutdingiz!`;
-            }
-            if (selectedSegment.reward.points) {
-                userData.totalScore += selectedSegment.reward.points;
-                winText = `${selectedSegment.reward.points} Ball yutdingiz!`;
-            }
-            if (selectedSegment.reward.premium) {
-                userData.premiumQuestions = (userData.premiumQuestions || 0) + selectedSegment.reward.premium;
-                winText = `Premium savol yutdingiz!`;
-            }
-            
-            saveUserData();
-            showNotification(winText);
-            
-            setTimeout(() => {
-                if (spinBtn) spinBtn.disabled = false;
-                currentState.isSpinning = false;
-                renderGames();
-            }, 500);
         }
 
         // ==================== UI RENDER ====================
@@ -1054,8 +1173,17 @@
         function renderHome() {
             const container = clearMainContent();
             
+            // Intro matn
+            container.innerHTML = `
+                <div class="intro-text">
+                    <div class="logo" style="font-size:3rem;margin-bottom:10px;">⚡ NEON QUIZ ⚡</div>
+                    <p>🌟 Xush kelibsiz! 🌟</p>
+                    <p>Test yechib ball to'plash uchun <strong>Savollar</strong> bo'limiga o'ting!</p>
+                </div>
+            `;
+            
             if (currentState.screen === 'main') {
-                container.innerHTML = `
+                container.innerHTML += `
                     <div class="subjects">
                         <div class="subject-card" onclick="window.selectSubject('Ingliz tili')">
                             <div class="subject-icon">🇺🇸</div>
@@ -1076,7 +1204,7 @@
                     ${(userData.premiumQuestions > 0) ? `<button class="btn" onclick="window.startPremiumQuiz()">⭐ Premium Savol Ishlatish (${userData.premiumQuestions})</button>` : ''}
                 `;
             } else if (currentState.screen === 'difficulty') {
-                container.innerHTML = `
+                container.innerHTML += `
                     <div class="difficulty-section">
                         <div class="difficulty-title">⚡ Qiyinlik darajasini tanlang</div>
                         <div class="difficulty-buttons">
@@ -1090,7 +1218,7 @@
             } else if (currentState.screen === 'quiz') {
                 const q = currentState.questions[currentState.currentQuestion];
                 const progress = `${currentState.currentQuestion + 1}/${currentState.questions.length}`;
-                container.innerHTML = `
+                container.innerHTML += `
                     <div class="question-card">
                         <div class="question-progress">📋 ${progress}</div>
                         <div class="question-text">${q.q}</div>
@@ -1101,11 +1229,15 @@
                 `;
             } else if (currentState.screen === 'result') {
                 const percentage = (currentState.score / currentState.questions.length) * 100;
-                let earnedPoints = currentState.score * window.getPointsValue(currentState.difficulty);
+                let earnedPoints = currentState.score * getPointsValue(currentState.difficulty);
                 earnedPoints = Math.floor(earnedPoints * currentState.currentBoostMultiplier);
                 if (currentState.vipActive) earnedPoints = Math.floor(earnedPoints * 2);
                 
-                container.innerHTML = `
+                if (!isVIP()) {
+                    userData.totalScore += earnedPoints;
+                }
+                
+                container.innerHTML += `
                     <div class="result-card">
                         <div class="logo">🎉</div>
                         <h2>Test Yakunlandi!</h2>
@@ -1118,79 +1250,45 @@
             }
         }
 
-        function renderGames() {
+        function renderTasks() {
             const container = clearMainContent();
-            const canFreeSpin = !userData.lastFreeSpin || new Date(userData.lastFreeSpin).toDateString() !== new Date().toDateString();
-            
-            const freeSegments = createWheelSegments(FREE_WHEEL_ITEMS);
-            const tokenSegments = createWheelSegments(TOKEN_WHEEL_ITEMS);
-            
-            let freeSegmentsHtml = '', tokenSegmentsHtml = '';
-            let freeAngle = 0, tokenAngle = 0;
-            
-            freeSegments.forEach(seg => {
-                freeSegmentsHtml += `<div class="wheel-segment" style="transform: rotate(${freeAngle}deg); background: ${seg.color}; width: 50%; height: 50%; left: 50%; top: 50%; transform-origin: 0% 0%; clip-path: polygon(0% 0%, 100% 0%, 50% 100%);"><span style="transform: rotate(45deg); display: inline-block; font-size: 10px;">${seg.name}</span></div>`;
-                freeAngle += seg.angle;
-            });
-            
-            tokenSegments.forEach(seg => {
-                tokenSegmentsHtml += `<div class="wheel-segment" style="transform: rotate(${tokenAngle}deg); background: ${seg.color}; width: 50%; height: 50%; left: 50%; top: 50%; transform-origin: 0% 0%; clip-path: polygon(0% 0%, 100% 0%, 50% 100%);"><span style="transform: rotate(45deg); display: inline-block; font-size: 10px;">${seg.name}</span></div>`;
-                tokenAngle += seg.angle;
-            });
             
             container.innerHTML = `
-                <div class="wheel-container">
-                    <h3>🎁 Kunlik Bepul Spin</h3>
-                    <div class="wheel-wrapper">
-                        <div class="wheel-pointer"></div>
-                        <div class="wheel" id="freeWheel">
-                            <div style="position: relative; width: 100%; height: 100%; border-radius: 50%; overflow: hidden;">
-                                ${freeSegmentsHtml}
-                            </div>
+                <div class="tasks-container">
+                    <h3>📋 TOPShIRIQLAR</h3>
+                    <p style="text-align:center;margin-bottom:15px;">Topshiriqlarni bajarib token yutib oling!</p>
+                    
+                    <div class="task-item">
+                        <div class="task-item-info">
+                            <h4>📢 Kanalga obuna bo'ling</h4>
+                            <p>@korea2033 kanaliga obuna bo'ling va 200 token yutib oling!</p>
                         </div>
-                        <div class="wheel-center">🎲</div>
+                        <div class="shop-item-price">
+                            <button class="task-btn ${userData.tasks.channelJoined ? 'completed' : ''}" onclick="window.checkChannelSubscription()" ${userData.tasks.channelJoined ? 'disabled' : ''}>
+                                ${userData.tasks.channelJoined ? '✅ Bajarildi' : '➕ 200 Token'}
+                            </button>
+                        </div>
                     </div>
-                    <button class="spin-btn" id="freeSpinBtn" ${!canFreeSpin ? 'disabled' : ''}>${canFreeSpin ? '🎰 BEPUL SPIN' : '⏰ ERTAGA KELING'}</button>
-                    <div class="spin-info">⚡ Har kuni 1 marta bepul!</div>
+                    
+                    <div class="task-item">
+                        <div class="task-item-info">
+                            <h4>✏️ Telegram nomingizni o'zgartiring</h4>
+                            <p>Telegram profilingizdagi ismni <strong>@ImtihonQuizBot</strong> ga o'zgartiring va 200 token yutib oling!</p>
+                        </div>
+                        <div class="shop-item-price">
+                            <button class="task-btn ${userData.tasks.usernameChanged ? 'completed' : ''}" onclick="window.changeUsername()" ${userData.tasks.usernameChanged ? 'disabled' : ''}>
+                                ${userData.tasks.usernameChanged ? '✅ Bajarildi' : '➕ 200 Token'}
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="wheel-container">
-                    <h3>💎 Token Spin (200 token)</h3>
-                    <div class="wheel-wrapper">
-                        <div class="wheel-pointer"></div>
-                        <div class="wheel" id="tokenWheel">
-                            <div style="position: relative; width: 100%; height: 100%; border-radius: 50%; overflow: hidden;">
-                                ${tokenSegmentsHtml}
-                            </div>
-                        </div>
-                        <div class="wheel-center">🎰</div>
-                    </div>
-                    <button class="spin-btn" id="tokenSpinBtn">🎰 TOKEN SPIN (200)</button>
-                    <div class="spin-info">💰 Tokenlar: ${userData.tokens || 0}</div>
+                <div class="channel-card">
+                    <h3>🇰🇷 KOREYA BLOG</h3>
+                    <p>Koreys tili va madaniyati haqida eng so'nggi yangiliklar!</p>
+                    <a href="${CHANNEL_URL}" target="_blank" class="channel-btn">🔗 Kanalga o'tish</a>
                 </div>
             `;
-            
-            const freeBtn = document.getElementById('freeSpinBtn');
-            const tokenBtn = document.getElementById('tokenSpinBtn');
-            const freeWheel = document.getElementById('freeWheel');
-            const tokenWheel = document.getElementById('tokenWheel');
-            
-            if (freeBtn) {
-                freeBtn.onclick = () => {
-                    window.currentWheel = freeWheel;
-                    spinWheel('free');
-                };
-            }
-            if (tokenBtn) {
-                tokenBtn.onclick = () => {
-                    if ((userData.tokens || 0) >= 200) {
-                        window.currentWheel = tokenWheel;
-                        spinWheel('token');
-                    } else {
-                        showNotification("Token yetarli emas! 200 token kerak.", false);
-                    }
-                };
-            }
         }
 
         function renderShop() {
@@ -1198,7 +1296,7 @@
             const discountActive = isDiscountDay();
             const discountText = discountActive ? ' 🔥 PAYSHANBA CHEGIRMA 20%!' : '';
             
-            let boostsHtml = '', quizHtml = '', vipHtml = '', specialHtml = '';
+            let boostsHtml = '', quizHtml = '', vipHtml = '';
             
             SHOP_ITEMS.boosts.forEach(item => {
                 const price = getDiscountedPrice(item.price);
@@ -1254,26 +1352,17 @@
                 `;
             });
             
-            SHOP_ITEMS.special.forEach(item => {
-                const price = getDiscountedPrice(item.price);
-                const originalPrice = item.price;
-                specialHtml += `
-                    <div class="shop-item">
-                        <div class="shop-item-info">
-                            <h4>🎁 ${item.name}</h4>
-                            <p>${item.desc}</p>
-                        </div>
-                        <div class="shop-item-price">
-                            ${discountActive && originalPrice !== price ? `<div class="price-original">${originalPrice} 🎫</div>` : ''}
-                            <div class="price-current">${price} 🎫</div>
-                            <button class="btn-shop" onclick="window.buyShopItem('${item.id}', 'special')">Sotib olish</button>
+            container.innerHTML = `
+                <div class="shop-container">
+                    <h3>🛍 VALYUTA ALMASHTIRISH</h3>
+                    <div class="exchange-section">
+                        <p>⭐ 10 Ball = 1 🎫 Token</p>
+                        <div class="exchange-buttons">
+                            <button class="exchange-btn" onclick="window.exchangePointsToTokens()">Ball → Token</button>
+                            <button class="exchange-btn" onclick="window.exchangeTokensToPoints()">Token → Ball</button>
                         </div>
                     </div>
-                `;
-            });
-            
-            container.innerHTML = `
-                <div class="wheel-container">
+                    
                     <h3>🛍 DO'KON ${discountText}</h3>
                     <div class="shop-category">
                         <div class="shop-category-title">⚡ BOOSTLAR</div>
@@ -1287,29 +1376,31 @@
                         <div class="shop-category-title">👑 VIP TIZIMI</div>
                         ${vipHtml}
                     </div>
-                    <div class="shop-category">
-                        <div class="shop-category-title">🎁 MAXSUS ITEMLAR</div>
-                        ${specialHtml}
-                    </div>
-                    <div class="spin-info" style="margin-top:20px">
+                    <div class="spin-info" style="margin-top:20px; text-align:center;">
                         📊 Sizning balansingiz:<br>
-                        ⭐ Ball: ${userData.totalScore}<br>
-                        🎫 Token: ${userData.tokens || 0}<br>
-                        👑 VIP: ${userData.vip && userData.vip.endTime > Date.now()/1000 ? 'Faol' : 'Faol emas'}<br>
+                        ⭐ Ball: ${getScoreBalance()}<br>
+                        🎫 Token: ${getTokenBalance()}<br>
+                        👑 VIP: ${currentState.vipActive ? 'Faol' : 'Faol emas'}<br>
                         ⚡ Boost: ${currentState.currentBoostMultiplier}x
                     </div>
                 </div>
             `;
         }
 
-        function buyShopItem(itemId, category) {
-            let item = null;
-            if (category === 'boosts') item = SHOP_ITEMS.boosts.find(i => i.id === itemId);
-            else if (category === 'quiz_powers') item = SHOP_ITEMS.quiz_powers.find(i => i.id === itemId);
-            else if (category === 'vip') item = SHOP_ITEMS.vip.find(i => i.id === itemId);
-            else if (category === 'special') item = SHOP_ITEMS.special.find(i => i.id === itemId);
+        function renderSearch() {
+            const container = clearMainContent();
             
-            if (item) buyItem(item, category);
+            container.innerHTML = `
+                <div class="search-container">
+                    <h3>🔍 DO'STLARNI QIDIRISH</h3>
+                    <div class="search-box">
+                        <input type="text" class="search-input" id="searchInput" placeholder="Ism yoki username bo'yicha qidirish..." oninput="window.searchUsers()">
+                    </div>
+                    <div id="userList" class="user-list">
+                        <div style="text-align:center;padding:20px;">🔎 Qidiruv natijalari shu yerda ko'rinadi</div>
+                    </div>
+                </div>
+            `;
         }
 
         function getPointsValue(difficulty) {
@@ -1339,7 +1430,7 @@
         }
 
         function startPremiumQuiz() {
-            if(userData.premiumQuestions <= 0) {
+            if(userData.premiumQuestions <= 0 && !isVIP()) {
                 showNotification("Premium savollaringiz yo'q!", false);
                 return;
             }
@@ -1380,17 +1471,12 @@
             
             const percentage = (currentState.score / currentState.questions.length) * 100;
             
-            userData.totalScore += earnedPoints;
+            if (!isVIP()) {
+                userData.totalScore += earnedPoints;
+            }
             userData.quizCount++;
             
-            // Token qo'shish (10 ball = 1 token)
-            const earnedTokens = Math.floor(earnedPoints / 10);
-            if (earnedTokens > 0) {
-                userData.tokens = (userData.tokens || 0) + earnedTokens;
-                showNotification(`+${earnedTokens} Token qo'shildi!`);
-            }
-            
-            if(currentState.isPremiumQuiz) {
+            if(currentState.isPremiumQuiz && !isVIP()) {
                 userData.totalScore += 150;
                 userData.premiumQuestions--;
                 showNotification("⭐ PREMIUM SAVOL! +150 ball! ⭐");
@@ -1429,24 +1515,24 @@
                 questions: [],
                 isPremiumQuiz: false,
                 activeTab: currentState.activeTab,
-                isSpinning: false,
                 currentBoostMultiplier: currentState.currentBoostMultiplier,
                 vipActive: currentState.vipActive
             };
             updateActiveBoost();
             if (currentState.activeTab === 'home') renderHome();
-            else if (currentState.activeTab === 'games') renderGames();
-            else renderShop();
+            else if (currentState.activeTab === 'tasks') renderTasks();
+            else if (currentState.activeTab === 'shop') renderShop();
+            else if (currentState.activeTab === 'search') renderSearch();
         }
 
         // Profil
         function openProfileModal() {
-            document.getElementById('modalUserName').innerText = tgUser ? tgUser.first_name : 'User';
-            document.getElementById('modalTotalScore').innerText = userData.totalScore;
-            document.getElementById('modalTokens').innerText = userData.tokens || 0;
+            document.getElementById('modalUserName').innerText = userData.displayName || (tgUser ? tgUser.first_name : 'User');
+            document.getElementById('modalTotalScore').innerText = getScoreBalance();
+            document.getElementById('modalTokens').innerText = getTokenBalance();
             document.getElementById('modalQuizCount').innerText = userData.quizCount;
             document.getElementById('modalBestScore').innerText = userData.bestPercentage + '%';
-            document.getElementById('modalVipStatus').innerHTML = (userData.vip && userData.vip.endTime > Date.now()/1000) ? 'Faol 👑' : 'Faol emas';
+            document.getElementById('modalVipStatus').innerHTML = (currentState.vipActive || isVIP()) ? 'Faol 👑' : 'Faol emas';
             document.getElementById('profileModal').style.display = 'flex';
         }
 
@@ -1465,6 +1551,15 @@
                     updateAvatarDisplay();
                     closeProfileModal();
                     showNotification("Profil rasmi o'zgartirildi!");
+                    
+                    // AllUsers ni yangilash
+                    if (tgUser) {
+                        const existingUser = allUsers.find(u => u.id === tgUser.id);
+                        if (existingUser) {
+                            existingUser.avatar = userAvatar;
+                            localStorage.setItem('allUsers_neon', JSON.stringify(allUsers));
+                        }
+                    }
                 };
                 reader.readAsDataURL(file);
             }
@@ -1474,26 +1569,38 @@
         document.getElementById('tabHome')?.addEventListener('click', () => {
             currentState.activeTab = 'home';
             document.getElementById('tabHome').classList.add('active');
-            document.getElementById('tabGames').classList.remove('active');
+            document.getElementById('tabTasks').classList.remove('active');
             document.getElementById('tabShop').classList.remove('active');
+            document.getElementById('tabSearch').classList.remove('active');
             currentState.screen = 'main';
             renderHome();
         });
         
-        document.getElementById('tabGames')?.addEventListener('click', () => {
-            currentState.activeTab = 'games';
-            document.getElementById('tabGames').classList.add('active');
+        document.getElementById('tabTasks')?.addEventListener('click', () => {
+            currentState.activeTab = 'tasks';
+            document.getElementById('tabTasks').classList.add('active');
             document.getElementById('tabHome').classList.remove('active');
             document.getElementById('tabShop').classList.remove('active');
-            renderGames();
+            document.getElementById('tabSearch').classList.remove('active');
+            renderTasks();
         });
 
         document.getElementById('tabShop')?.addEventListener('click', () => {
             currentState.activeTab = 'shop';
             document.getElementById('tabShop').classList.add('active');
             document.getElementById('tabHome').classList.remove('active');
-            document.getElementById('tabGames').classList.remove('active');
+            document.getElementById('tabTasks').classList.remove('active');
+            document.getElementById('tabSearch').classList.remove('active');
             renderShop();
+        });
+
+        document.getElementById('tabSearch')?.addEventListener('click', () => {
+            currentState.activeTab = 'search';
+            document.getElementById('tabSearch').classList.add('active');
+            document.getElementById('tabHome').classList.remove('active');
+            document.getElementById('tabTasks').classList.remove('active');
+            document.getElementById('tabShop').classList.remove('active');
+            renderSearch();
         });
 
         document.getElementById('profileBtn')?.addEventListener('click', openProfileModal);
@@ -1527,7 +1634,13 @@
         window.resetToMain = resetToMain;
         window.getPointsValue = getPointsValue;
         window.buyShopItem = buyShopItem;
-        window.spinWheel = spinWheel;
+        window.exchangePointsToTokens = exchangePointsToTokens;
+        window.exchangeTokensToPoints = exchangeTokensToPoints;
+        window.checkChannelSubscription = checkChannelSubscription;
+        window.changeUsername = changeUsername;
+        window.searchUsers = searchUsers;
+        window.viewUserProfile = viewUserProfile;
+        window.registerUser = registerUser;
         window.showNotification = showNotification;
     </script>
 </body>
